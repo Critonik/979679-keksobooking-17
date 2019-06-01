@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Тимур Алексеев](https://up.htmlacademy.ru/javascript/17/user/979679).
-* Наставник: `Алёна Сиприкова`.
+* Наставник: [Алёна Сиприкова](https://htmlacademy.ru/profile/asiprikova).
 
 ---
 
