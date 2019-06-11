@@ -1,12 +1,15 @@
 'use strict';
 document.querySelector('.map').classList.remove('map--faded');
-var overlay = document.querySelector('.map__overlay');
+var overlay = document.querySelector('.map');
+var mapPinsElement = document.querySelector('.map__pins');
+var pinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var YMIN = 130;
 var YMAX = 630;
+var setOffer = ['palace', 'flat', 'house', 'bungalo'];
+
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
-var setOffer = ['palace', 'flat', 'house', 'bungalo'];
 
 var bookingInfo = [];
 for (var i = 1; i <= 8; i++) {
@@ -18,15 +21,18 @@ for (var i = 1; i <= 8; i++) {
   });
 }
 
-var mapPinsElement = document.querySelector('.map__pins');
-var pinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-
-for (i = 1; i <= 8; i++) {
+var renderPins = function (info) {
   var pinElement = pinsTemplate.cloneNode(true);
   var pinElementImg = pinElement.querySelector('img');
-  pinElementImg.src = bookingInfo[i].author;
-  pinElementImg.alt = bookingInfo[i].offer;
-  pinElement.style.left = bookingInfo[i].locationX + 'px';
-  pinElement.style.top = bookingInfo[i].locationY + 'px';
-  mapPinsElement.appendChild(pinElement);
+  pinElementImg.src = info.author;
+  pinElementImg.alt = info.offer;
+  pinElement.style.left = info.locationX + 'px';
+  pinElement.style.top = info.locationY + 'px';
+  return pinElement;
+};
+
+var fragment = document.createDocumentFragment();
+for (i = 1; i <= bookingInfo.length; i++) {
+  fragment.appendChild(renderPins(bookingInfo[i]));
 }
+mapPinsElement.appendChild(fragment);
