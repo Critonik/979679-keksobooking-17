@@ -6,6 +6,7 @@ var pinsTemplate = document.querySelector('#pin').content.querySelector('.map__p
 var YMIN = 130;
 var YMAX = 630;
 var setOffer = ['palace', 'flat', 'house', 'bungalo'];
+var fragment = document.createDocumentFragment();
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -22,6 +23,9 @@ for (var i = 1; i <= 8; i++) {
 }
 
 var renderPins = function (info) {
+  if (info === null) {
+    console.log(null);
+  }
   var pinElement = pinsTemplate.cloneNode(true);
   var pinElementImg = pinElement.querySelector('img');
   pinElementImg.src = info.author;
@@ -31,8 +35,7 @@ var renderPins = function (info) {
   return pinElement;
 };
 
-var fragment = document.createDocumentFragment();
-for (i = 1; i <= bookingInfo.length; i++) {
+for (i = 1; i < bookingInfo.length; i++) {
   fragment.appendChild(renderPins(bookingInfo[i]));
 }
 mapPinsElement.appendChild(fragment);
