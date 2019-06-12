@@ -23,9 +23,6 @@ for (var i = 1; i <= 8; i++) {
 }
 
 var renderPins = function (info) {
-  if (info === null) {
-    console.log(null);
-  }
   var pinElement = pinsTemplate.cloneNode(true);
   var pinElementImg = pinElement.querySelector('img');
   pinElementImg.src = info.author;
