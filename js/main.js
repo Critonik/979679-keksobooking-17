@@ -14,18 +14,16 @@ function getRandomInt(min, max) {
 
 var getPinPositionTop = function (elem) {
   return Math.round(elem.getBoundingClientRect().top);
-}
+};
 
 var getPinPositionLeft = function (el) {
   return Math.round(el.getBoundingClientRect().left);
-}
+};
 
 mainPin.addEventListener('mouseup', function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   address.value = getPinPositionTop(mainPin) + ', ' + getPinPositionLeft(mainPin);
-  console.log(getPinPositionTop(mainPin));
-  console.log(getPinPositionLeft(mainPin));
 });
 
 var bookingInfo = [];
