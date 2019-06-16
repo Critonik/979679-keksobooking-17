@@ -24,6 +24,11 @@ mainPin.addEventListener('mouseup', function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   address.value = getPinPositionTop(mainPin) + ', ' + getPinPositionLeft(mainPin);
+  var fragment = document.createDocumentFragment();
+  for (i = 1; i < bookingInfo.length; i++) {
+    fragment.appendChild(renderPins(bookingInfo[i]));
+  }
+  mapPinsElement.appendChild(fragment);
 });
 
 var bookingInfo = [];
@@ -45,9 +50,3 @@ var renderPins = function (info) {
   pinElement.style.top = info.locationY + 'px';
   return pinElement;
 };
-
-var fragment = document.createDocumentFragment();
-for (i = 1; i < bookingInfo.length; i++) {
-  fragment.appendChild(renderPins(bookingInfo[i]));
-}
-mapPinsElement.appendChild(fragment);
