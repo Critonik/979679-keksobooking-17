@@ -15,10 +15,10 @@ function getRandomInt(min, max) {
 
 var formBlocking = function () {
   for (var i = 0; i < adForm.children.length; i++) {
-    adForm.children[i].setAttribute('disabled', 'true');
+    adForm.children[i].setAttribute('disabled', true);
   }
   for (i = 0; i < mapFilters.children.length; i++) {
-    mapFilters.children[i].setAttribute('disabled', 'true');
+    mapFilters.children[i].setAttribute('disabled', true);
   }
 };
 
@@ -28,10 +28,10 @@ var deleteBlocking = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   for (var i = 0; i < adForm.children.length; i++) {
-    adForm.children[i].removeAttribute('disabled', 'true');
+    adForm.children[i].removeAttribute('disabled');
   }
-  for (i = 0; i < mapFilters.length; i++) {
-    mapFilters.children[i].removeAttribute('disabled', 'true');
+  for (i = 0; i < mapFilters.children.length; i++) {
+    mapFilters.children[i].removeAttribute('disabled');
   }
 };
 
