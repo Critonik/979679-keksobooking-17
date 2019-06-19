@@ -12,7 +12,7 @@ var arrivalTime = adForm.querySelector('#timein');
 var departureTime = adForm.querySelector('#timeout');
 var YMIN = 130;
 var YMAX = 630;
-var setOffer = ['palace', 'flat', 'house', 'bungalo'];
+var setOffer = ['bungalo', 'flat', 'house', 'palace'];
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -90,36 +90,39 @@ mainPin.addEventListener('mouseup', function () {
   createPinOnMap();
 });
 
-var changeMinPrice = function () {
-  if (placeType.selectedIndex === 0) {
-    priceInput.placeholder = '0';
-    priceInput.min = '0';
-  } else if (placeType.selectedIndex === 1) {
-    priceInput.placeholder = '1000';
-    priceInput.min = '1000';
-  } else if (placeType.selectedIndex === 2) {
-    priceInput.placeholder = '5000';
-    priceInput.min = '5000';
-  } else if (placeType.selectedIndex === 3) {
-    priceInput.placeholder = '10000';
-    priceInput.min = '10000';
+var changePrice = function () {
+  var changeMinPrice = placeType.options[placeType.selectedIndex].value;
+  switch (changeMinPrice) {
+    case changeMinPrice = setOffer[0]:
+      priceInput.placeholder = '0';
+      priceInput.min = '0';
+      break;
+    case changeMinPrice = setOffer[1]:
+      priceInput.placeholder = '1000';
+      priceInput.min = '1000';
+      break;
+    case changeMinPrice = setOffer[2]:
+      priceInput.placeholder = '5000';
+      priceInput.min = '5000';
+      break;
+    case changeMinPrice = setOffer[3]:
+      priceInput.placeholder = '10000';
+      priceInput.min = '10000';
+      break;
   }
 };
 
 placeType.addEventListener('input', function () {
-  changeMinPrice();
+  changePrice();
 });
 
-var syncTime = function () {
-  for (var j = 0; j <= arrivalTime.options.length; j++) {
-    var arrival = arrivalTime.options[j];
-    var departure = departureTime.options[j];
-    if (arrival[j].selected) {
-      departure[j].selected;
-    }
-  }
+var onTimeInChange = function () {
+  departureTime.value = arrivalTime.value;
 };
 
-arrivalTime.addEventListener('click', function () {
-  syncTime();
-});
+var onTimeOutChange = function () {
+  arrivalTime.value = departureTime.value;
+};
+
+arrivalTime.addEventListener('change', onTimeInChange);
+departureTime.addEventListener('change', onTimeOutChange);
