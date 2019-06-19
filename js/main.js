@@ -90,39 +90,59 @@ mainPin.addEventListener('mouseup', function () {
   createPinOnMap();
 });
 
-var changePrice = function () {
-  var changeMinPrice = placeType.options[placeType.selectedIndex].value;
-  switch (changeMinPrice) {
-    case changeMinPrice = setOffer[0]:
+var changePrice = function (select) {
+  switch (select) {
+    case select = setOffer[0]:
       priceInput.placeholder = '0';
       priceInput.min = '0';
       break;
-    case changeMinPrice = setOffer[1]:
+    case select = setOffer[1]:
       priceInput.placeholder = '1000';
       priceInput.min = '1000';
       break;
-    case changeMinPrice = setOffer[2]:
+    case select = setOffer[2]:
       priceInput.placeholder = '5000';
       priceInput.min = '5000';
       break;
-    case changeMinPrice = setOffer[3]:
+    case select = setOffer[3]:
       priceInput.placeholder = '10000';
       priceInput.min = '10000';
       break;
   }
 };
 
-placeType.addEventListener('input', function () {
-  changePrice();
+placeType.addEventListener('change', function (evt) {
+  evt.preventDefault();
+  var target = evt.target.value;
+  changePrice(target);
 });
 
-var onTimeInChange = function () {
-  departureTime.value = arrivalTime.value;
+var syncFirstTime = function (firstOption, firstOptionValue) {
+  for (var j = 0; j < firstOption.length; j++) {
+    if (firstOptionValue === departureTime[j].value) {
+      departureTime.options[j].selected = true;
+    }
+  }
 };
 
-var onTimeOutChange = function () {
-  arrivalTime.value = departureTime.value;
+arrivalTime.addEventListener('change', function (e) {
+  e.preventDefault();
+  var first = e.target;
+  var firstValue = e.target.value;
+  syncFirstTime(first, firstValue);
+});
+
+var syncSecondTime = function (secondOption, secondOptionValue) {
+  for (var k = 0; k < secondOption.length; k++) {
+    if (secondOptionValue === arrivalTime[k].value) {
+      arrivalTime.options[k].selected = true;
+    }
+  }
 };
 
-arrivalTime.addEventListener('change', onTimeInChange);
-departureTime.addEventListener('change', onTimeOutChange);
+departureTime.addEventListener('change', function (ev) {
+  ev.preventDefault();
+  var second = ev.target;
+  var secondValue = ev.target.value;
+  syncSecondTime(second, secondValue);
+});
