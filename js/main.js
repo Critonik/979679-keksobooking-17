@@ -6,9 +6,13 @@ var mapFilters = document.querySelector('.map__filters');
 var address = document.getElementById('address');
 var mapPinsElement = document.querySelector('.map__pins');
 var pinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+var placeType = adForm.querySelector('#type');
+var priceInput = adForm.querySelector('#price');
+var arrivalTime = adForm.querySelector('#timein');
+var departureTime = adForm.querySelector('#timeout');
 var YMIN = 130;
 var YMAX = 630;
-var setOffer = ['palace', 'flat', 'house', 'bungalo'];
+var setOffer = ['bungalo', 'flat', 'house', 'palace'];
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -84,4 +88,61 @@ var createPinOnMap = function () {
 mainPin.addEventListener('mouseup', function () {
   setAdress();
   createPinOnMap();
+});
+
+var changePrice = function (select) {
+  switch (select) {
+    case setOffer[0]:
+      priceInput.placeholder = '0';
+      priceInput.min = '0';
+      break;
+    case setOffer[1]:
+      priceInput.placeholder = '1000';
+      priceInput.min = '1000';
+      break;
+    case setOffer[2]:
+      priceInput.placeholder = '5000';
+      priceInput.min = '5000';
+      break;
+    case setOffer[3]:
+      priceInput.placeholder = '10000';
+      priceInput.min = '10000';
+      break;
+  }
+};
+
+placeType.addEventListener('change', function (evt) {
+  evt.preventDefault();
+  var target = evt.target.value;
+  changePrice(target);
+});
+
+var syncFirstTime = function (firstOption, firstOptionValue) {
+  for (var j = 0; j < firstOption.length; j++) {
+    if (firstOptionValue === departureTime[j].value) {
+      departureTime.options[j].selected = true;
+    }
+  }
+};
+
+arrivalTime.addEventListener('change', function (e) {
+  e.preventDefault();
+  var first = e.target;
+  var firstValue = e.target.value;
+  syncFirstTime(first, firstValue);
+});
+
+var syncSecondTime = function (secondOption, secondOptionValue) {
+  for (var k = 0; k < secondOption.length; k++) {
+    if (secondOptionValue === arrivalTime[k].value) {
+      arrivalTime.options[k].selected = true;
+    }
+  }
+};
+
+departureTime.addEventListener('change', function (ev) {
+  ev.preventDefault();
+  var second = ev.target;
+  var secondValue = ev.target.value;
+  syncSecondTime(second, secondValue);
 });
