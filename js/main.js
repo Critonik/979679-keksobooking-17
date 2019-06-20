@@ -40,11 +40,11 @@ var deleteBlocking = function () {
 };
 
 var getPinPositionTop = function (elem) {
-  return Math.round(elem.getBoundingClientRect().top - (elem.offsetHeight) / 2);
+  return Math.round(elem.getBoundingClientRect().y - (elem.offsetHeight / 2));
 };
 
 var getPinPositionLeft = function (el) {
-  return Math.round(el.getBoundingClientRect().left - (el.offsetWidth) / 2);
+  return Math.round(el.getBoundingClientRect().x - (el.offsetWidth / 2));
 };
 
 var setAdress = function () {
@@ -52,10 +52,6 @@ var setAdress = function () {
 };
 
 setAdress();
-
-mainPin.addEventListener('click', function () {
-  deleteBlocking();
-});
 
 var bookingInfo = [];
 for (var i = 1; i <= 8; i++) {
@@ -85,9 +81,55 @@ var createPinOnMap = function () {
   mapPinsElement.appendChild(fragment);
 };
 
-mainPin.addEventListener('mouseup', function () {
-  setAdress();
+mainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  deleteBlocking();
   createPinOnMap();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+    mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+
+    if (mainPin.getBoundingClientRect().x > YMAX) {
+      mainPin.getBoundingClientRect().x = YMAX;
+    } else if (mainPin.getBoundingClientRect().x <= YMIN) {
+      mainPin.getBoundingClientRect().x = YMIN;
+    }
+
+    if (mainPin.getBoundingClientRect().y > map.offsetWidth) {
+      mainPin.getBoundingClientRect().y = map.offsetWidth;
+    } else if (mainPin.getBoundingClientRect().y < 0) {
+      mainPin.getBoundingClientRect().y = 0;
+    }
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    setAdress();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
 
 var changePrice = function (select) {
