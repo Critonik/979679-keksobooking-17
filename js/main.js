@@ -14,6 +14,7 @@ var YMIN = 130;
 var YMAX = 630;
 var XMAX = 1100;
 var XMIN = 100;
+var MAP_XMIN = 10;
 var setOffer = ['bungalo', 'flat', 'house', 'palace'];
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -116,7 +117,7 @@ mainPin.addEventListener('mousedown', function (evt) {
     if (mainPin.getBoundingClientRect().left > XMAX) {
       mainPin.style.left = XMAX + 'px';
     } else if (mainPin.getBoundingClientRect().left < XMIN) {
-      mainPin.style.left = XMIN + 'px';
+      mainPin.style.left = MAP_XMIN + 'px';
     }
 
     if (mainPin.getBoundingClientRect().top > YMAX) {
