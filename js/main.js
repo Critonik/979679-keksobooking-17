@@ -13,7 +13,7 @@ var departureTime = adForm.querySelector('#timeout');
 var YMIN = 130;
 var YMAX = 630;
 var XMAX = 1100;
-var XMIN = 50;
+var XMIN = 100;
 var setOffer = ['bungalo', 'flat', 'house', 'palace'];
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
