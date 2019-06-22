@@ -112,7 +112,6 @@ mainPin.addEventListener('mousedown', function (evt) {
 
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
-    setAdress();
 
     if (mainPin.getBoundingClientRect().left > XMAX) {
       mainPin.style.left = XMAX + 'px';
@@ -126,6 +125,7 @@ mainPin.addEventListener('mousedown', function (evt) {
       mainPin.style.top = YMIN + 'px';
     }
 
+    setAdress();
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
