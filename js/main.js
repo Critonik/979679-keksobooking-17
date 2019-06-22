@@ -12,6 +12,8 @@ var arrivalTime = adForm.querySelector('#timein');
 var departureTime = adForm.querySelector('#timeout');
 var YMIN = 130;
 var YMAX = 630;
+var XMAX = 1100;
+var XMIN = 50;
 var setOffer = ['bungalo', 'flat', 'house', 'palace'];
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -48,7 +50,7 @@ var getPinPositionLeft = function (el) {
 };
 
 var setAdress = function () {
-  address.value = getPinPositionTop(mainPin) + ', ' + getPinPositionLeft(mainPin);
+  address.value = getPinPositionLeft(mainPin) + ', ' + getPinPositionTop(mainPin);
 };
 
 setAdress();
@@ -106,23 +108,23 @@ mainPin.addEventListener('mousedown', function (evt) {
 
     mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
     mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
-
-    if (mainPin.getBoundingClientRect().x > YMAX) {
-      mainPin.getBoundingClientRect().x = YMAX;
-    } else if (mainPin.getBoundingClientRect().x <= YMIN) {
-      mainPin.getBoundingClientRect().x = YMIN;
-    }
-
-    if (mainPin.getBoundingClientRect().y > map.offsetWidth) {
-      mainPin.getBoundingClientRect().y = map.offsetWidth;
-    } else if (mainPin.getBoundingClientRect().y < 0) {
-      mainPin.getBoundingClientRect().y = 0;
-    }
   };
 
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
     setAdress();
+
+    if (mainPin.getBoundingClientRect().left > XMAX) {
+      mainPin.style.left = XMAX + 'px';
+    } else if (mainPin.getBoundingClientRect().left < XMIN) {
+      mainPin.style.left = XMIN + 'px';
+    }
+
+    if (mainPin.getBoundingClientRect().top > YMAX) {
+      mainPin.style.top = YMAX + 'px';
+    } else if (mainPin.getBoundingClientRect().top < YMIN) {
+      mainPin.style.top = YMIN + 'px';
+    }
 
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
