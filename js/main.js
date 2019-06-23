@@ -40,11 +40,11 @@ var deleteBlocking = function () {
 };
 
 var getPinPositionTop = function (elem) {
-  return elem.offsetTop - (elem.offsetHeight / 2);
+  return elem.offsetTop + elem.offsetHeight;
 };
 
 var getPinPositionLeft = function (el) {
-  return el.offsetLeft - (el.offsetWidth / 2);
+  return el.offsetLeft + (el.offsetWidth / 2);
 };
 
 var setAdress = function () {
@@ -119,10 +119,10 @@ mainPin.addEventListener('mousedown', function (evt) {
     }
 
     if (mainPin.getBoundingClientRect().top > (YMAX - mainPin.offsetHeight)) {
-      mainPin.style.top = YMAX + 'px';
+      mainPin.style.top = (YMAX - mainPin.offsetHeight) + 'px';
     }
     if (mainPin.getBoundingClientRect().top < (YMIN - mainPin.offsetHeight)) {
-      mainPin.style.top = YMIN + 'px';
+      mainPin.style.top = (YMIN - mainPin.offsetHeight) + 'px';
     }
 
     setAdress();
