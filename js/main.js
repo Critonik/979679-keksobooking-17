@@ -12,9 +12,6 @@ var arrivalTime = adForm.querySelector('#timein');
 var departureTime = adForm.querySelector('#timeout');
 var YMIN = 130;
 var YMAX = 630;
-var XMAX = 1100;
-var XMIN = 100;
-var MAP_XMIN = 10;
 var setOffer = ['bungalo', 'flat', 'house', 'palace'];
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -43,11 +40,11 @@ var deleteBlocking = function () {
 };
 
 var getPinPositionTop = function (elem) {
-  return Math.round(elem.getBoundingClientRect().y - (elem.offsetHeight / 2));
+  return elem.offsetTop - (elem.offsetHeight / 2);
 };
 
 var getPinPositionLeft = function (el) {
-  return Math.round(el.getBoundingClientRect().x - (el.offsetWidth / 2));
+  return el.offsetLeft - (el.offsetWidth / 2);
 };
 
 var setAdress = function () {
@@ -114,15 +111,17 @@ mainPin.addEventListener('mousedown', function (evt) {
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
 
-    if (mainPin.getBoundingClientRect().left > XMAX) {
-      mainPin.style.left = XMAX + 'px';
-    } else if (mainPin.getBoundingClientRect().left < XMIN) {
-      mainPin.style.left = MAP_XMIN + 'px';
+    if (mainPin.offsetLeft > (map.offsetWidth - mainPin.offsetWidth)) {
+      mainPin.style.left = (map.offsetWidth - mainPin.offsetWidth) + 'px';
+    }
+    if (mainPin.offsetLeft < 0) {
+      mainPin.style.left = 0 + 'px';
     }
 
-    if (mainPin.getBoundingClientRect().top > YMAX) {
+    if (mainPin.getBoundingClientRect().top > (YMAX - mainPin.offsetHeight)) {
       mainPin.style.top = YMAX + 'px';
-    } else if (mainPin.getBoundingClientRect().top < YMIN) {
+    }
+    if (mainPin.getBoundingClientRect().top < (YMIN - mainPin.offsetHeight)) {
       mainPin.style.top = YMIN + 'px';
     }
 
