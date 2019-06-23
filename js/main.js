@@ -47,11 +47,11 @@ var getPinPositionLeft = function (el) {
   return el.offsetLeft + (el.offsetWidth / 2);
 };
 
-var setAdress = function () {
-  address.value = getPinPositionLeft(mainPin) + ', ' + getPinPositionTop(mainPin);
+var setAdress = function (element) {
+  address.value = getPinPositionLeft(element) + ', ' + getPinPositionTop(element);
 };
 
-setAdress();
+setAdress(mainPin);
 
 var bookingInfo = [];
 for (var i = 1; i <= 8; i++) {
@@ -106,10 +106,7 @@ mainPin.addEventListener('mousedown', function (evt) {
 
     mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
     mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
-  };
 
-  var onMouseUp = function (upEvt) {
-    upEvt.preventDefault();
 
     if (mainPin.offsetLeft > (map.offsetWidth - mainPin.offsetWidth)) {
       mainPin.style.left = (map.offsetWidth - mainPin.offsetWidth) + 'px';
@@ -118,14 +115,19 @@ mainPin.addEventListener('mousedown', function (evt) {
       mainPin.style.left = 0 + 'px';
     }
 
-    if (mainPin.getBoundingClientRect().top > (YMAX - mainPin.offsetHeight)) {
+    if (mainPin.offsetTop > (YMAX - mainPin.offsetHeight)) {
       mainPin.style.top = (YMAX - mainPin.offsetHeight) + 'px';
     }
-    if (mainPin.getBoundingClientRect().top < (YMIN - mainPin.offsetHeight)) {
+    if (mainPin.offsetTop < (YMIN - mainPin.offsetHeight)) {
       mainPin.style.top = (YMIN - mainPin.offsetHeight) + 'px';
     }
 
-    setAdress();
+    setAdress(mainPin);
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
@@ -137,21 +139,21 @@ mainPin.addEventListener('mousedown', function (evt) {
 var changePrice = function (select) {
   switch (select) {
     case setOffer[0]:
-      priceInput.placeholder = '0';
-      priceInput.min = '0';
-      break;
+    priceInput.placeholder = '0';
+    priceInput.min = '0';
+    break;
     case setOffer[1]:
-      priceInput.placeholder = '1000';
-      priceInput.min = '1000';
-      break;
+    priceInput.placeholder = '1000';
+    priceInput.min = '1000';
+    break;
     case setOffer[2]:
-      priceInput.placeholder = '5000';
-      priceInput.min = '5000';
-      break;
+    priceInput.placeholder = '5000';
+    priceInput.min = '5000';
+    break;
     case setOffer[3]:
-      priceInput.placeholder = '10000';
-      priceInput.min = '10000';
-      break;
+    priceInput.placeholder = '10000';
+    priceInput.min = '10000';
+    break;
   }
 };
 
