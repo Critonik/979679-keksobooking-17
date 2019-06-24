@@ -45,8 +45,8 @@ window.util = (function () {
         className.children[y].removeAttribute(attribute);
       }
     },
-    deleteBlockTag: function (tagName, attr) {
-      tagName.classList.remove(attr);
+    deleteBlockTag: function (tagName, att) {
+      tagName.classList.remove(att);
     },
     addBlockChildren: function (className) {
       for (var i = 0; i < className.children.length; i++) {
