@@ -63,7 +63,6 @@ mainPin.addEventListener('mousedown', function (evt) {
   adForm.classList.remove('ad-form--disabled');
   window.util.unblockForm(adForm, 'disabled');
   window.util.unblockForm(mapFilters, 'disabled');
-  createPinOnMap();
 
   var startCoords = {
     x: evt.clientX,
@@ -73,6 +72,7 @@ mainPin.addEventListener('mousedown', function (evt) {
   var onMouseMove = function (moveEvt) {
     moveEvt.preventDefault();
 
+    createPinOnMap();
     var shift = {
       x: startCoords.x - moveEvt.clientX,
       y: startCoords.y - moveEvt.clientY
