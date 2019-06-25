@@ -5,23 +5,23 @@ var adForm = document.querySelector('.ad-form');
 var mapFilters = document.querySelector('.map__filters');
 var address = document.getElementById('address');
 var mapPinsElement = document.querySelector('.map__pins');
-var setOffer = ['bungalo', 'flat', 'house', 'palace'];
+var setOffers = ['bungalo', 'flat', 'house', 'palace'];
 var pinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var YMIN = 130;
 var YMAX = 630;
 
 (function () {
-  window.util.addBlockChildren(adForm);
-  window.util.addBlockChildren(mapFilters);
+  window.util.blockForm(adForm);
+  window.util.blockForm(mapFilters);
 })();
 
 var bookingInfo = [];
 for (var i = 1; i <= 8; i++) {
   bookingInfo.push({
     author: 'img/avatars/user0' + i + '.png',
-    offer: setOffer[window.util.randomNumber(0, setOffer.length)],
-    locationX: window.util.randomNumber(0, map.offsetWidth),
-    locationY: window.util.randomNumber(YMIN, YMAX)
+    offer: setOffers[window.util.getRandomInt(0, setOffers.length)],
+    locationX: window.util.getRandomInt(0, map.offsetWidth),
+    locationY: window.util.getRandomInt(YMIN, YMAX)
   });
 }
 
@@ -59,10 +59,10 @@ setAdress(mainPin);
 
 mainPin.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
-  window.util.deleteBlockTag(map, 'map--faded');
-  window.util.deleteBlockTag(adForm, 'ad-form--disabled');
-  window.util.deleteBlockChildren(adForm, 'disabled');
-  window.util.deleteBlockChildren(mapFilters, 'disabled');
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  window.util.unblockForm(adForm, 'disabled');
+  window.util.unblockForm(mapFilters, 'disabled');
   createPinOnMap();
 
   var startCoords = {

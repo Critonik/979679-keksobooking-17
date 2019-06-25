@@ -5,12 +5,11 @@
   var arrivalTime = adForm.querySelector('#timein');
   var departureTime = adForm.querySelector('#timeout');
   var priceInput = adForm.querySelector('#price');
-  var setOffer = ['bungalo', 'flat', 'house', 'palace'];
+  var setOffers = ['bungalo', 'flat', 'house', 'palace'];
 
   placeType.addEventListener('change', function (evt) {
     evt.preventDefault();
-    var target = evt.target.value;
-    window.util.changePrice(target, priceInput, setOffer);
+    window.util.changePrice(evt.target.value, priceInput, setOffers);
   });
 
   window.util.syncPlace(arrivalTime, departureTime);

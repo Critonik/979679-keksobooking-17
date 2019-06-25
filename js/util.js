@@ -2,22 +2,20 @@
 
 window.util = (function () {
   return {
-    randomNumber: function (min, max) {
+    getRandomInt: function (min, max) {
       return Math.floor(Math.random() * (max - min)) + min;
     },
-    syncTime: function (firstOption, firstOptionValue, time) {
-      for (var j = 0; j < firstOption.length; j++) {
-        if (firstOptionValue === time[j].value) {
-          time.options[j].selected = true;
+    syncTime: function (elemFrom, value, elemTo) {
+      for (var j = 0; j < elemFrom.length; j++) {
+        if (value === elemTo[j].value) {
+          elemTo.options[j].selected = true;
         }
       }
     },
-    syncPlace: function (elem, inTime) {
-      elem.addEventListener('change', function (e) {
+    syncPlace: function (selectFrom, selectTo) {
+      selectFrom.addEventListener('change', function (e) {
         e.preventDefault();
-        var first = e.target;
-        var firstValue = e.target.value;
-        window.util.syncTime(first, firstValue, inTime);
+        window.util.syncTime(e.target, e.target.value, selectTo);
       });
     },
     changePrice: function (select, input, offer) {
@@ -40,15 +38,12 @@ window.util = (function () {
           break;
       }
     },
-    deleteBlockChildren: function (className, attribute) {
+    unblockForm: function (className, attribute) {
       for (var y = 0; y < className.children.length; y++) {
         className.children[y].removeAttribute(attribute);
       }
     },
-    deleteBlockTag: function (tagName, att) {
-      tagName.classList.remove(att);
-    },
-    addBlockChildren: function (className) {
+    blockForm: function (className) {
       for (var i = 0; i < className.children.length; i++) {
         className.children[i].setAttribute('disabled', true);
       }
