@@ -5,7 +5,6 @@ var adForm = document.querySelector('.ad-form');
 var mapFilters = document.querySelector('.map__filters');
 var address = document.getElementById('address');
 var mapPinsElement = document.querySelector('.map__pins');
-var setOffers = ['bungalo', 'flat', 'house', 'palace'];
 var pinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var YMIN = 130;
 var YMAX = 630;
@@ -15,32 +14,33 @@ var YMAX = 630;
   window.util.blockForm(mapFilters);
 })();
 
-var bookingInfo = [];
-for (var i = 1; i <= 8; i++) {
-  bookingInfo.push({
-    author: 'img/avatars/user0' + i + '.png',
-    offer: setOffers[window.util.getRandomInt(0, setOffers.length)],
-    locationX: window.util.getRandomInt(0, map.offsetWidth),
-    locationY: window.util.getRandomInt(YMIN, YMAX)
-  });
-}
-
 var renderPins = function (info) {
   var pinElement = pinsTemplate.cloneNode(true);
   var pinElementImg = pinElement.querySelector('img');
-  pinElementImg.src = info.author;
-  pinElementImg.alt = info.offer;
-  pinElement.style.left = info.locationX + 'px';
-  pinElement.style.top = info.locationY + 'px';
+  pinElementImg.src = info.author.avatar;
+  pinElementImg.alt = info.offer.type;
+  pinElement.style.left = info.location.x + 'px';
+  pinElement.style.top = info.location.y + 'px';
   return pinElement;
 };
 
-var createPinOnMap = function () {
+var successHandler = function (pins) {
   var fragment = document.createDocumentFragment();
-  for (var j = 1; j < bookingInfo.length; j++) {
-    fragment.appendChild(renderPins(bookingInfo[j]));
+
+  for (var i = 0; i < pins.length; i++) {
+    fragment.appendChild(renderPins(pins[i]));
   }
   mapPinsElement.appendChild(fragment);
+};
+
+var errorHandler = function () {
+  var errorBlock = document.querySelector('#error').content.querySelector('.error');
+  var errorModule = errorBlock.cloneNode(true);
+  map.appendChild(errorModule);
+  var errorButton = map.querySelector('.error__button');
+  errorButton.addEventListener('click', function () {
+    location.reload();
+  });
 };
 
 var getPinPositionTop = function (elem) {
@@ -72,7 +72,6 @@ mainPin.addEventListener('mousedown', function (evt) {
   var onMouseMove = function (moveEvt) {
     moveEvt.preventDefault();
 
-    createPinOnMap();
     var shift = {
       x: startCoords.x - moveEvt.clientX,
       y: startCoords.y - moveEvt.clientY
@@ -111,6 +110,12 @@ mainPin.addEventListener('mousedown', function (evt) {
     document.removeEventListener('mouseup', onMouseUp);
   };
 
+  var rendP = function () {
+    window.load(successHandler, errorHandler);
+    document.removeEventListener('mousemove', rendP);
+  };
+
+  document.addEventListener('mousemove', rendP);
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
 });
