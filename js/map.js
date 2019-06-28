@@ -8,7 +8,7 @@ var mapPinsElement = document.querySelector('.map__pins');
 var pinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var YMIN = 130;
 var YMAX = 630;
-var flag = false;
+var offersLoaded = false;
 
 (function () {
   window.util.blockForm(adForm);
@@ -50,7 +50,7 @@ var createPinOnMap = function () {
     mapPinsElement.appendChild(fragment);
   };
 
-  var errorHandler = function () {
+  var onError = function () {
     var errorBlock = document.querySelector('#error').content.querySelector('.error');
     var errorModule = errorBlock.cloneNode(true);
     map.appendChild(errorModule);
@@ -59,7 +59,7 @@ var createPinOnMap = function () {
       location.reload();
     });
   };
-  window.load(successHandler, errorHandler);
+  window.load(successHandler, onError);
 };
 
 var pinMove = function (evt) {
@@ -107,11 +107,11 @@ var pinMove = function (evt) {
 
     setAdress(mainPin);
 
-    if (!flag) {
+    if (!offersLoaded) {
       createPinOnMap();
     }
 
-    flag = true;
+    offersLoaded = true;
   };
 
   var onMouseUp = function (upEvt) {
