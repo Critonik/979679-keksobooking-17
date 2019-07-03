@@ -5,18 +5,19 @@
   var arrivalTime = adForm.querySelector('#timein');
   var departureTime = adForm.querySelector('#timeout');
   var priceInput = adForm.querySelector('#price');
-  var setOffers = ['bungalo', 'flat', 'house', 'palace'];
 
   var offerToValue = {
-    'bungalo': '0',
-    'flat': '1000',
-    'house': '5000',
-    'palace': '10000'
+    bungalo: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
   };
 
   placeType.addEventListener('change', function (evt) {
     evt.preventDefault();
-    window.util.changePrice(evt.target.value, priceInput, setOffers);
+    window.util.changePrice(evt.target.value, priceInput, offerToValue);
+    window.deletePins();
+    window.setTimeout(window.updatePins(), 3000);
   });
 
   window.util.syncPlace(arrivalTime, departureTime);

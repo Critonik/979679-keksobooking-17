@@ -18,24 +18,12 @@ window.util = (function () {
         window.util.syncTime(e.target, e.target.value, selectTo);
       });
     },
-    changePrice: function (select, input, offer) {
-      switch (select) {
-        case offer[0]:
-          input.placeholder = '0';
-          input.min = '0';
-          break;
-        case offer[1]:
-          input.placeholder = '1000';
-          input.min = '1000';
-          break;
-        case offer[2]:
-          input.placeholder = '5000';
-          input.min = '5000';
-          break;
-        case offer[3]:
-          input.placeholder = '10000';
-          input.min = '10000';
-          break;
+    changePrice: function (select, input, offers) {
+      for (var key in offers) {
+        if (select === key) {
+          input.placeholder = offers[key];
+          input.min = offers[key];
+        }
       }
     },
     unblockForm: function (className, attribute) {
