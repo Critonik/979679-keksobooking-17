@@ -17,7 +17,7 @@
     evt.preventDefault();
     window.util.changePrice(evt.target.value, priceInput, offerToValue);
     window.deletePins();
-    window.setTimeout(window.updatePins(), 3000);
+    window.debounce(window.updatePins);
   });
 
   window.util.syncPlace(arrivalTime, departureTime);

@@ -1,9 +1,9 @@
 'use strict';
 var pinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-var typeOfHouse = document.getElementById('type').value;
 var pin = [];
 var map = document.querySelector('.map');
 var mapPinsElement = map.querySelector('.map__pins');
+
 
 var getInfoAboutPins = function (info) {
   var pinElement = pinsTemplate.cloneNode(true);
@@ -26,24 +26,18 @@ var createPins = function (pins) {
 };
 
 window.deletePins = function () {
-  /* var samePins = pin.filter(function (it) {
-    return it.offer.type === typeOfHouse;
-  });
-
-  var takeNumber = samePins.length > 5 ? 5 : samePins.length;
-  var fragment = document.createDocumentFragment();
-
-  for (var i = 0; i < takeNumber; i++) {
-    fragment.appendChild(getInfoAboutPins(samePins[i]));
-  }
-  mapPinsElement.removeChild(fragment); */
-  while (mapPinsElement.firstChild) {
-    mapPinsElement.removeChild(mapPinsElement.firstChild);
+  var pisnToDelete = map.querySelectorAll('.map__pin:not(.map__pin--main)');
+  for (var j = 0; j < pisnToDelete.length; j++) {
+    if (pisnToDelete[j].className.toLowerCase() === 'map__pin') {
+      pisnToDelete[j].parentNode.removeChild(pisnToDelete[j]);
+    }
   }
 };
 
 window.updatePins = function () {
-  var samePins = pin.filter(function (it) {
+  var typeOfHouse = document.getElementById('type').value;
+  var pinCopy = pin.slice();
+  var samePins = pinCopy.filter(function (it) {
     return it.offer.type === typeOfHouse;
   });
   createPins(samePins);
