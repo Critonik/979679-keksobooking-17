@@ -4,8 +4,6 @@ var mainPin = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 var mapFilters = document.querySelector('.map__filters');
 var address = document.getElementById('address');
-var mapPinsElement = document.querySelector('.map__pins');
-var pinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var YMIN = 130;
 var YMAX = 630;
 var offersLoaded = false;
@@ -29,38 +27,6 @@ var setAdress = function (element) {
 
 setAdress(mainPin);
 
-var createPinOnMap = function () {
-
-  var renderPins = function (info) {
-    var pinElement = pinsTemplate.cloneNode(true);
-    var pinElementImg = pinElement.querySelector('img');
-    pinElementImg.src = info.author.avatar;
-    pinElementImg.alt = info.offer.type;
-    pinElement.style.left = info.location.x + 'px';
-    pinElement.style.top = info.location.y + 'px';
-    return pinElement;
-  };
-
-  var successHandler = function (pins) {
-    var fragment = document.createDocumentFragment();
-
-    for (var i = 0; i < pins.length; i++) {
-      fragment.appendChild(renderPins(pins[i]));
-    }
-    mapPinsElement.appendChild(fragment);
-  };
-
-  var onError = function () {
-    var errorBlock = document.querySelector('#error').content.querySelector('.error');
-    var errorModule = errorBlock.cloneNode(true);
-    map.appendChild(errorModule);
-    var errorButton = map.querySelector('.error__button');
-    errorButton.addEventListener('click', function () {
-      location.reload();
-    });
-  };
-  window.load(successHandler, onError);
-};
 
 var pinMove = function (evt) {
   evt.preventDefault();
@@ -108,7 +74,7 @@ var pinMove = function (evt) {
     setAdress(mainPin);
 
     if (!offersLoaded) {
-      createPinOnMap();
+      window.createPinOnMap();
     }
 
     offersLoaded = true;
