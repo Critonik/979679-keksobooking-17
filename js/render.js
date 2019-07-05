@@ -36,24 +36,26 @@ window.deletePins = function () {
 };
 
 window.updatePins = function (type) {
-  var typeOfHouse = type;
-  if (typeOfHouse === 'any') {
-    typeOfHouse = pin;
-    createPins(pin);
-  } else {
-    var pinCopy = pin.slice();
-    var samePins = pinCopy.filter(function (it) {
-      return it.offer.type === typeOfHouse;
-    });
-    createPins(samePins);
-  }
+  return function () {
+    var typeOfHouse = type;
+    if (typeOfHouse === 'any') {
+      typeOfHouse = pin;
+      createPins(pin);
+    } else {
+      var pinCopy = pin.slice();
+      var samePins = pinCopy.filter(function (it) {
+        return it.offer.type === typeOfHouse;
+      });
+      createPins(samePins);
+    }
+  };
 };
 
 window.createPinOnMap = function () {
   var successHandler = function (data) {
     var typeOfHouse = document.getElementById('housing-type').value;
     pin = data;
-    window.updatePins(typeOfHouse);
+    window.debounce(window.updatePins(typeOfHouse));
   };
 
   var onError = function () {
