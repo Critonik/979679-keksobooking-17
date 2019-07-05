@@ -16,8 +16,6 @@
   placeType.addEventListener('change', function (evt) {
     evt.preventDefault();
     window.util.changePrice(evt.target.value, priceInput, offerToValue);
-    window.deletePins();
-    window.debounce(window.updatePins);
   });
 
   window.util.syncPlace(arrivalTime, departureTime);
