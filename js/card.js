@@ -79,7 +79,9 @@ window.setCard = function () {
   for (var i = 0; i < selectPin.length; i++) {
     if (selectPin[i].className.toLowerCase() === 'map__pin') {
       selectPin[i].addEventListener('click', function () {
-        window.card(pin[i]);
+        if (parseInt(selectPin[i].offsetLeft) === pin[i].location.x) {
+          window.card(pin[i]);
+        }
       });
     }
   }
