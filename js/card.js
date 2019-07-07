@@ -1,6 +1,15 @@
 'use strict';
 var map = document.querySelector('.map');
 var cardBlock = document.querySelector('#card').content.querySelector('.map__card');
+var filtersContainer = map.querySelector('.map__filters-container');
+var cardModule = cardBlock.cloneNode(true);
+var typeToType = {
+  bungalo: 'Бунгало',
+  flat: 'Квартира',
+  house: 'Дом',
+  palace: 'Дворец'
+};
+
 var onPopupEscPress = function (evt) {
   window.util.isEscEvent(evt, window.closePopup);
 };
@@ -13,8 +22,7 @@ window.closePopup = function () {
   document.removeEventListener('keydown', onPopupEscPress);
 };
 
-window.card = function (info) {
-  var cardModule = cardBlock.cloneNode(true);
+var renderCard = function (info) {
   var cardTitle = cardModule.querySelector('.popup__title');
   var cardAdress = cardModule.querySelector('.popup__text--address');
   var cardPrice = cardModule.querySelector('.popup__text--price');
@@ -25,28 +33,34 @@ window.card = function (info) {
   var cardDescription = cardModule.querySelector('.popup__description');
   var cardPhotos = cardModule.querySelector('.popup__photos');
   var cardAvatars = cardModule.querySelector('.popup__avatar');
-  for (var t = 0; t < info.length; t++) {
-    cardTitle[t].innerText = info.offer.title;
-    cardAdress[t].innerText = info.offer.address;
-    cardPrice[t].innerText = info.offer.price + '₽/ночь';
-    cardType[t].innerText = info.offer.type;
-    cardGuestAndRoom[t].innerText = info.offer.rooms + ' комнаты для ' + info.offer.guests + ' гостей.';
-    cardArrivalDepartureTime[t].innerText = 'Заезд после ' + info.offer.checkin + ' выезд до ' + info.offer.checkout;
-    cardFeature[t].innerHTML = '';
-    for (var j = 0; j < info.offer.features.length; j++) {
-      cardFeature[t].innerHTML += '<li class="popup__feature popup__feature--' + info.offer.features[j] + '"></li>';
+  cardTitle.innerText = info.offer.title;
+  cardAdress.innerText = info.offer.address;
+  cardPrice.innerText = info.offer.price + '₽/ночь';
+  cardType.innerText = info.offer.type;
+  for (var key in typeToType) {
+    if (info.offer.type === key) {
+      cardType.innerText = typeToType[key];
     }
-    cardDescription[t].innerHTML = info.offer.description;
-    cardPhotos[t].innerHTML = '';
-    for (var i = 0; i < info.offer.photos.length; i++) {
-      cardPhotos[t].innerHTML += '<img src="' + info.offer.photos + '" class="popup__photo" width="45" height="40" alt="Фотография жилья>';
-    }
-    cardAvatars[t].src = info.author.avatar;
-
   }
-  map.insertBefore(cardModule, filtersContainer);
+  cardGuestAndRoom.innerText = info.offer.rooms + ' комнаты для ' + info.offer.guests + ' гостей.';
+  cardArrivalDepartureTime.innerText = 'Заезд после ' + info.offer.checkin + ' выезд до ' + info.offer.checkout;
+  cardFeature.innerHTML = '';
+  for (var j = 0; j < info.offer.features.length; j++) {
+    cardFeature.innerHTML += '<li class="popup__feature popup__feature--' + info.offer.features[j] + '"></li>';
+  }
+  cardDescription.innerHTML = info.offer.description;
+  cardPhotos.innerHTML = '';
+  for (var i = 0; i < info.offer.photos.length; i++) {
+    cardPhotos.innerHTML += '<img src="' + info.offer.photos[i] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья>';
+  }
+  cardAvatars.src = info.author.avatar;
 
-  var filtersContainer = map.querySelector('.map__filters-container');
+  map.insertBefore(cardModule, filtersContainer);
+  return cardModule;
+};
+
+window.card = function (info) {
+  renderCard(info);
   var closeButton = map.querySelector('.popup__close');
   closeButton.addEventListener('click', function () {
     cardModule.parentNode.removeChild(cardModule);
@@ -56,8 +70,6 @@ window.card = function (info) {
     window.util.isEnterEvent(evt, window.closePopup);
   });
   document.addEventListener('keydown', onPopupEscPress);
-
-  return cardModule;
 };
 
 window.setCard = function (pin) {
@@ -66,6 +78,9 @@ window.setCard = function (pin) {
     if (selectPin[i].className.toLowerCase() === 'map__pin') {
       selectPin[i].addEventListener('click', function () {
         window.card(pin[i]);
+        /* if(parseInt(selectPin[i].style.top) === pin[i].location.y && parseInt(selectPin[i].style.left) === pin[i].location.x) {
+
+        }*/
       });
     }
   }
