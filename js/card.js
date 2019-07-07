@@ -61,6 +61,7 @@ var renderCard = function (info) {
 
 window.card = function (info) {
   renderCard(info);
+
   var closeButton = map.querySelector('.popup__close');
   closeButton.addEventListener('click', function () {
     cardModule.parentNode.removeChild(cardModule);
