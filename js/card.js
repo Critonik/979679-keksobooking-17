@@ -2,6 +2,7 @@
 var map = document.querySelector('.map');
 var cardBlock = document.querySelector('#card').content.querySelector('.map__card');
 var filtersContainer = map.querySelector('.map__filters-container');
+var pin = [];
 var cardModule = cardBlock.cloneNode(true);
 var typeToType = {
   bungalo: 'Бунгало',
@@ -73,15 +74,12 @@ window.card = function (info) {
   document.addEventListener('keydown', onPopupEscPress);
 };
 
-window.setCard = function (pin) {
-  var selectPin = document.querySelectorAll('.map__pin');
+window.setCard = function () {
+  var selectPin = document.querySelectorAll('.map__pin:not(.map__pin--main)');
   for (var i = 0; i < selectPin.length; i++) {
     if (selectPin[i].className.toLowerCase() === 'map__pin') {
       selectPin[i].addEventListener('click', function () {
         window.card(pin[i]);
-        /* if(parseInt(selectPin[i].style.top) === pin[i].location.y && parseInt(selectPin[i].style.left) === pin[i].location.x) {
-
-        }*/
       });
     }
   }
