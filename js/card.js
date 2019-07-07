@@ -55,7 +55,6 @@ var renderCard = function (info) {
     cardPhotos.innerHTML += '<img src="' + info.offer.photos[i] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья>';
   }
   cardAvatars.src = info.author.avatar;
-
   map.insertBefore(cardModule, filtersContainer);
   return cardModule;
 };
@@ -79,9 +78,7 @@ window.setCard = function () {
   for (var i = 0; i < selectPin.length; i++) {
     if (selectPin[i].className.toLowerCase() === 'map__pin') {
       selectPin[i].addEventListener('click', function () {
-        if (parseInt(selectPin[i].offsetLeft) === pin[i].location.x) {
-          window.card(pin[i]);
-        }
+        window.card(pin[i]);
       });
     }
   }
