@@ -40,14 +40,14 @@ window.updatePins = function (type) {
   if (typeOfHouse === 'any') {
     typeOfHouse = pin;
     createPins(pin);
-    window.setCard(pin);
+    window.addListnersOnCard();
   } else {
     var pinCopy = pin.slice();
     var samePins = pinCopy.filter(function (it) {
       return it.offer.type === typeOfHouse;
     });
     createPins(samePins);
-    window.setCard(samePins);
+    window.addListnersOnCard();
   }
 };
 

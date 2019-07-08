@@ -3,6 +3,7 @@ var map = document.querySelector('.map');
 var cardBlock = document.querySelector('#card').content.querySelector('.map__card');
 var filtersContainer = map.querySelector('.map__filters-container');
 var cardModule = cardBlock.cloneNode(true);
+var pin = [];
 var typeToType = {
   bungalo: 'Бунгало',
   flat: 'Квартира',
@@ -79,16 +80,17 @@ window.card = function (info) {
   document.addEventListener('keydown', onPopupEscPress);
 };
 
-window.setCard = function (info) {
-  map.onclick = function (event) {
-    var target = event.target;
-    while (target !== map) {
-      if (target.className === 'map__pin') {
-        window.card(info[0]);
-        window.openPopup();
-        return;
-      }
-      target = target.parentNode;
-    }
-  };
+var addListeners = function () {
+  var selectPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
+  for (var i = 0; i < selectPins.length; i++) {
+    selectPins[i].addEventListener('click', function () {
+      window.card(pin[0]);
+      window.openPopup();
+    });
+  }
+};
+
+
+window.addListnersOnCard = function () {
+  addListeners();
 };
