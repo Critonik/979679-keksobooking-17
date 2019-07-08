@@ -91,6 +91,6 @@ var addListeners = function () {
 };
 
 
-window.addListnersOnCard = function () {
+window.addListnersOnPin = function () {
   addListeners();
 };
