@@ -6,13 +6,14 @@ var mapPinsElement = map.querySelector('.map__pins');
 var housingType = map.querySelector('#housing-type');
 
 
-var getInfoAboutPins = function (info) {
+var getInfoAboutPins = function (info , i) {
   var pinElement = pinsTemplate.cloneNode(true);
   var pinElementImg = pinElement.querySelector('img');
   pinElementImg.src = info.author.avatar;
   pinElementImg.alt = info.offer.type;
   pinElement.style.left = info.location.x + 'px';
   pinElement.style.top = info.location.y + 'px';
+  pinElement.setAttribute('data', i);
   return pinElement;
 };
 
@@ -21,7 +22,7 @@ var createPins = function (pins) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < takeNumber; i++) {
-    fragment.appendChild(getInfoAboutPins(pins[i]));
+    fragment.appendChild(getInfoAboutPins(pins[i], i));
   }
   mapPinsElement.appendChild(fragment);
 };
