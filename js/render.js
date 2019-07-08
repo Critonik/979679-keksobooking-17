@@ -47,7 +47,7 @@ window.updatePins = function (type) {
       return it.offer.type === typeOfHouse;
     });
     createPins(samePins);
-    window.setCard(pin);
+    window.setCard(samePins);
   }
 };
 
