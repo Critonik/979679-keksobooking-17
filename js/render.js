@@ -6,7 +6,7 @@ var mapPinsElement = map.querySelector('.map__pins');
 var housingType = map.querySelector('#housing-type');
 
 
-var getInfoAboutPins = function (info , i) {
+var getInfoAboutPins = function (info, i) {
   var pinElement = pinsTemplate.cloneNode(true);
   var pinElementImg = pinElement.querySelector('img');
   pinElementImg.src = info.author.avatar;
