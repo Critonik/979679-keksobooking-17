@@ -4,7 +4,7 @@ var cardBlock = document.querySelector('#card').content.querySelector('.map__car
 var filtersContainer = map.querySelector('.map__filters-container');
 var cardModule = cardBlock.cloneNode(true);
 var pin = [];
-var typeToType = {
+var TypeToType = {
   bungalo: 'Бунгало',
   flat: 'Квартира',
   house: 'Дом',
@@ -47,7 +47,7 @@ var renderCard = function (info) {
   cardModule.querySelector('.popup__title').innerText = info.offer.title;
   cardModule.querySelector('.popup__text--address').innerText = info.offer.address;
   cardModule.querySelector('.popup__text--price').innerText = info.offer.price + '₽/ночь';
-  cardModule.querySelector('.popup__type').innerText = typeToType[info.offer.type];
+  cardModule.querySelector('.popup__type').innerText = TypeToType[info.offer.type];
   cardModule.querySelector('.popup__text--capacity').innerText = info.offer.rooms + ' комнаты для ' + info.offer.guests + ' гостей.';
   cardModule.querySelector('.popup__text--time').innerText = 'Заезд после ' + info.offer.checkin + ' выезд до ' + info.offer.checkout;
   var cardFeature = cardModule.querySelector('.popup__features');
