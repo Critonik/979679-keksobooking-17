@@ -13,6 +13,7 @@ var getInfoAboutPins = function (info) {
   pinElementImg.alt = info.offer.type;
   pinElement.style.left = info.location.x + 'px';
   pinElement.style.top = info.location.y + 'px';
+  pinElement.setAttribute('data-key-pin', info.location.x);
   return pinElement;
 };
 
@@ -40,12 +41,14 @@ window.updatePins = function (type) {
   if (typeOfHouse === 'any') {
     typeOfHouse = pin;
     createPins(pin);
+    window.addListnersOnPin();
   } else {
     var pinCopy = pin.slice();
     var samePins = pinCopy.filter(function (it) {
       return it.offer.type === typeOfHouse;
     });
     createPins(samePins);
+    window.addListnersOnPin();
   }
 };
 

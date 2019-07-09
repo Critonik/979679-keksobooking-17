@@ -1,6 +1,9 @@
 'use strict';
 
 window.util = (function () {
+  var ESC_KEYCODE = 27;
+  var ENTER_KEYCODE = 13;
+
   return {
     getRandomInt: function (min, max) {
       return Math.floor(Math.random() * (max - min)) + min;
@@ -34,6 +37,16 @@ window.util = (function () {
     blockForm: function (className) {
       for (var i = 0; i < className.children.length; i++) {
         className.children[i].setAttribute('disabled', true);
+      }
+    },
+    isEscEvent: function (evt, action) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        action();
+      }
+    },
+    isEnterEvent: function (evt, action) {
+      if (evt.keyCode === ENTER_KEYCODE) {
+        action();
       }
     }
   };
