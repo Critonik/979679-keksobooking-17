@@ -69,8 +69,10 @@ var renderCard = function (info) {
 var detectedCard = function (pinObj, elem) {
   var parsedElX = parseInt(elem.dataset.keyPinX, 10);
   var parsedElY = parseInt(elem.dataset.keyPinY, 10);
-  if ((parsedElX === pinObj.location.x && parsedElY === pinObj.location.y) === true) {
-    return pinObj;
+  for (var j = 0; j < pinObj.length; j++) {
+    if ((parsedElX === pinObj[j].location.x && parsedElY === pinObj[j].location.y) === true) {
+      return pinObj[j];
+    }
   }
   return null; // это заглушка, линтер ругается, что возвращать ффункция должна что-то
 };
@@ -93,7 +95,7 @@ var addListeners = function () {
   var selectPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
   for (var i = 0; i < selectPins.length; i++) {
     selectPins[i].addEventListener('click', function (evt) {
-      window.card(detectedCard(pin[0], evt.currentTarget));
+      window.card(detectedCard(pin, evt.currentTarget));
       window.openPopup();
     });
   }
