@@ -69,10 +69,10 @@ var renderCard = function (info) {
 var detectedCard = function (pinObj, elem) {
   var parsedElX = parseInt(elem.dataset.keyPinX, 10);
   var parsedElY = parseInt(elem.dataset.keyPinY, 10);
-  if (parsedElX === pinObj.location.x && parsedElY === pinObj.location.y) {
+  if ((parsedElX === pinObj.location.x && parsedElY === pinObj.location.y) === true) {
     return pinObj;
   }
-  return pinObj;
+  return window.onError(); // это заглушка, линтер ругается, что возвращать ффункция должна что-то
 };
 
 window.card = function (info) {
@@ -92,14 +92,14 @@ window.card = function (info) {
 var addListeners = function () {
   var selectPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
   for (var i = 0; i < selectPins.length; i++) {
-    selectPins[i].addEventListener('click', function () {
-      window.card(detectedCard(pin[i], selectPins[i]));
+    selectPins[i].addEventListener('click', function (evt) {
+      window.card(detectedCard(pin[i], evt.currentTarget));
       window.openPopup();
     });
   }
 };
 
 
-window.addListnersOnPin = function () {
+window.addListenersOnPin = function () {
   addListeners();
 };

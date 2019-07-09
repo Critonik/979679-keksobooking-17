@@ -41,14 +41,14 @@ window.updatePins = function (type) {
   if (typeOfHouse === 'any') {
     typeOfHouse = pin;
     createPins(pin);
-    window.addListnersOnPin();
+    window.addListenersOnPin();
   } else {
     var pinCopy = pin.slice();
     var filteredPins = pinCopy.filter(function (it) {
       return it.offer.type === typeOfHouse;
     });
     createPins(filteredPins);
-    window.addListnersOnPin();
+    window.addListenersOnPin();
   }
 };
 
@@ -61,7 +61,7 @@ window.createPinOnMap = function () {
     });
   };
 
-  var onError = function () {
+  window.onError = function () {
     var errorBlock = document.querySelector('#error').content.querySelector('.error');
     var errorModule = errorBlock.cloneNode(true);
     map.appendChild(errorModule);
@@ -70,7 +70,7 @@ window.createPinOnMap = function () {
       location.reload();
     });
   };
-  window.load(successHandler, onError);
+  window.load(successHandler, window.onError);
 };
 
 housingType.addEventListener('change', function (evt) {
