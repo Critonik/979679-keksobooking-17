@@ -5,7 +5,6 @@ var map = document.querySelector('.map');
 var mapPinsElement = map.querySelector('.map__pins');
 var housingType = map.querySelector('#housing-type');
 
-
 var getInfoAboutPins = function (info) {
   var pinElement = pinsTemplate.cloneNode(true);
   var pinElementImg = pinElement.querySelector('img');
@@ -13,7 +12,8 @@ var getInfoAboutPins = function (info) {
   pinElementImg.alt = info.offer.type;
   pinElement.style.left = info.location.x + 'px';
   pinElement.style.top = info.location.y + 'px';
-  pinElement.setAttribute('data-key-pin', info.location.x);
+  pinElement.setAttribute('data-key-pin-X', info.location.x);
+  pinElement.setAttribute('data-key-pin-Y', info.location.y);
   return pinElement;
 };
 
@@ -44,10 +44,10 @@ window.updatePins = function (type) {
     window.addListnersOnPin();
   } else {
     var pinCopy = pin.slice();
-    var samePins = pinCopy.filter(function (it) {
+    var filteredPins = pinCopy.filter(function (it) {
       return it.offer.type === typeOfHouse;
     });
-    createPins(samePins);
+    createPins(filteredPins);
     window.addListnersOnPin();
   }
 };

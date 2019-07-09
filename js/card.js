@@ -66,6 +66,15 @@ var renderCard = function (info) {
   return cardModule;
 };
 
+var detectedCard = function (pinObj, elem) {
+  var parsedElX = parseInt(elem.dataset.keyPinX, 10);
+  var parsedElY = parseInt(elem.dataset.keyPinY, 10);
+  if (parsedElX === pinObj.location.x && parsedElY === pinObj.location.y) {
+    return pinObj;
+  }
+  return pinObj;
+};
+
 window.card = function (info) {
   renderCard(info);
   map.insertBefore(cardModule, filtersContainer);
@@ -84,7 +93,7 @@ var addListeners = function () {
   var selectPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
   for (var i = 0; i < selectPins.length; i++) {
     selectPins[i].addEventListener('click', function () {
-      window.card(pin[0]);
+      window.card(detectedCard(pin[i], selectPins[i]));
       window.openPopup();
     });
   }
