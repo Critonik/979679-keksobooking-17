@@ -9,10 +9,8 @@
   var YMAX = 630;
   var offersLoaded = false;
 
-  (function () {
-    window.util.blockForm(adForm);
-    window.util.blockForm(mapFilters);
-  })();
+  window.util.blockForm(adForm);
+  window.util.blockForm(mapFilters);
 
   var getPinPositionTop = function (elem) {
     return elem.offsetTop + elem.offsetHeight;

@@ -67,15 +67,15 @@
     return cardModule;
   };
 
-  var detectedCard = function (pinObj, elem) {
+  var detectedCard = function (pinsArr, elem) {
     var parsedElX = parseInt(elem.dataset.keyPinX, 10);
     var parsedElY = parseInt(elem.dataset.keyPinY, 10);
-    for (var j = 0; j < pinObj.length; j++) {
-      if ((parsedElX === pinObj[j].location.x && parsedElY === pinObj[j].location.y) === true) {
-        return pinObj[j];
+    for (var j = 0; j < pinsArr.length; j++) {
+      if (parsedElX === pinsArr[j].location.x && parsedElY === pinsArr[j].location.y) {
+        return pinsArr[j];
       }
     }
-    return pinObj;
+    return pinsArr;
   };
 
   window.card = function (info) {
@@ -92,18 +92,13 @@
     document.addEventListener('keydown', onPopupEscPress);
   };
 
-  var addListeners = function (pinsObj) {
+  window.addListenersOnPin = function (pinsArr) {
     var selectPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
     for (var i = 0; i < selectPins.length; i++) {
       selectPins[i].addEventListener('click', function (evt) {
-        window.card(detectedCard(pinsObj, evt.currentTarget));
+        window.card(detectedCard(pinsArr, evt.currentTarget));
         window.openPopup();
       });
     }
-  };
-
-
-  window.addListenersOnPin = function (pinsObj) {
-    addListeners(pinsObj);
   };
 })();

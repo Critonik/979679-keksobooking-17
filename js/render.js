@@ -6,7 +6,7 @@
   var mapPinsElement = map.querySelector('.map__pins');
   var housingType = map.querySelector('#housing-type');
 
-  var getInfoAboutPins = function (info) {
+  var setInfoAboutPins = function (info) {
     var pinElement = pinsTemplate.cloneNode(true);
     var pinElementImg = pinElement.querySelector('img');
     pinElementImg.src = info.author.avatar;
@@ -23,7 +23,7 @@
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < takeNumber; i++) {
-      fragment.appendChild(getInfoAboutPins(pins[i]));
+      fragment.appendChild(setInfoAboutPins(pins[i]));
     }
     mapPinsElement.appendChild(fragment);
   };
@@ -31,26 +31,22 @@
   window.deletePins = function () {
     var pisnToDelete = map.querySelectorAll('.map__pin:not(.map__pin--main)');
     for (var j = 0; j < pisnToDelete.length; j++) {
-      if (pisnToDelete[j].className.toLowerCase() === 'map__pin') {
-        pisnToDelete[j].parentNode.removeChild(pisnToDelete[j]);
-      }
+      pisnToDelete[j].parentNode.removeChild(pisnToDelete[j]);
     }
   };
 
   window.updatePins = function (type) {
-    var typeOfHouse = type;
     var pinCopy = pin.slice();
-    if (typeOfHouse === 'any') {
-      typeOfHouse = pin;
-      createPins(pinCopy);
-      window.addListenersOnPin(pinCopy);
-    } else {
-      var filteredPins = pinCopy.filter(function (it) {
-        return it.offer.type === typeOfHouse;
+    createPins(pinCopy);
+    var filteredPins;
+    if (type !== 'any') {
+      filteredPins = pinCopy.filter(function (it) {
+        return it.offer.type === type;
       });
+      window.deletePins();
       createPins(filteredPins);
-      window.addListenersOnPin(pinCopy);
     }
+    window.addListenersOnPin(pinCopy);
   };
 
   window.createPinOnMap = function () {
@@ -77,7 +73,6 @@
   housingType.addEventListener('change', function (evt) {
     evt.preventDefault();
     var typeOfHouse = document.getElementById('housing-type').value;
-    window.deletePins();
     window.debounce(function () {
       window.updatePins(typeOfHouse);
     });
