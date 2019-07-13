@@ -44,7 +44,7 @@
       createPins(pinsCopy);
       var filteredPins;
       if (type !== 'any') {
-        filteredPins = pinsCopy .filter(function (it) {
+        filteredPins = pinsCopy.filter(function (it) {
           return it.offer.type === type;
         });
         window.render.deletePins();

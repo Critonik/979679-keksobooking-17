@@ -70,12 +70,11 @@
   var detectionCard = function (pinsArr, elem) {
     var parsedElX = parseInt(elem.dataset.keyPinX, 10);
     var parsedElY = parseInt(elem.dataset.keyPinY, 10);
-    for (var k = 0; k < pinsArr.length; k++) {
-      if (parsedElX === pinsArr[k].location.x && parsedElY === pinsArr[k].location.y) {
-        return pinsArr[k];
-      }
-    }
-    return pinsArr;
+    var filteredPins;
+    filteredPins = pinsArr.filter(function (it) {
+      return ((it.location.x === parsedElX) && (it.location.y === parsedElY));
+    });
+    return filteredPins[0];
   };
 
   var renderCard = function (info) {
