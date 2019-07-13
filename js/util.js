@@ -1,24 +1,25 @@
 'use strict';
 
-window.util = (function () {
+(function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
+  var DEBOUNCE_INTERVAL = 500;
 
-  return {
+  window.util = {
     getRandomInt: function (min, max) {
       return Math.floor(Math.random() * (max - min)) + min;
     },
     syncTime: function (elemFrom, value, elemTo) {
-      for (var j = 0; j < elemFrom.length; j++) {
-        if (value === elemTo[j].value) {
-          elemTo.options[j].selected = true;
+      for (var i = 0; i < elemFrom.length; i++) {
+        if (value === elemTo[i].value) {
+          elemTo.options[i].selected = true;
         }
       }
     },
     syncPlace: function (selectFrom, selectTo) {
-      selectFrom.addEventListener('change', function (e) {
-        e.preventDefault();
-        window.util.syncTime(e.target, e.target.value, selectTo);
+      selectFrom.addEventListener('change', function (evt) {
+        evt.preventDefault();
+        window.util.syncTime(evt.target, evt.target.value, selectTo);
       });
     },
     changePrice: function (select, input, offers) {
@@ -30,13 +31,13 @@ window.util = (function () {
       }
     },
     unblockForm: function (className, attribute) {
-      for (var y = 0; y < className.children.length; y++) {
-        className.children[y].removeAttribute(attribute);
+      for (var j = 0; j < className.children.length; j++) {
+        className.children[j].removeAttribute(attribute);
       }
     },
     blockForm: function (className) {
-      for (var i = 0; i < className.children.length; i++) {
-        className.children[i].setAttribute('disabled', true);
+      for (var k = 0; k < className.children.length; k++) {
+        className.children[k].setAttribute('disabled', true);
       }
     },
     isEscEvent: function (evt, action) {
@@ -48,18 +49,13 @@ window.util = (function () {
       if (evt.keyCode === ENTER_KEYCODE) {
         action();
       }
+    },
+    debounce: function (cb) {
+      var lastTimeout;
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(cb, DEBOUNCE_INTERVAL);
     }
-  };
-})();
-
-(function () {
-  var DEBOUNCE_INTERVAL = 500; // ms
-
-  var lastTimeout;
-  window.debounce = function (cb) {
-    if (lastTimeout) {
-      window.clearTimeout(lastTimeout);
-    }
-    lastTimeout = window.setTimeout(cb, DEBOUNCE_INTERVAL);
   };
 })();

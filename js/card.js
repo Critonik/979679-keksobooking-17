@@ -13,38 +13,38 @@
   };
 
   var onPopupEscPress = function (evt) {
-    window.util.isEscEvent(evt, window.closePopup);
+    window.util.isEscEvent(evt, closePopup);
   };
 
-  window.closePopup = function () {
+  var closePopup = function () {
     var popupCard = document.querySelector('.popup');
     popupCard.classList.add('hidden');
     document.removeEventListener('keydown', onPopupEscPress);
   };
 
-  window.openPopup = function () {
+  var openPopup = function () {
     var popupCard = document.querySelector('.popup');
     popupCard.classList.remove('hidden');
   };
 
-  var createLiElement = function (el, secondClass) {
+  var createLiElement = function (elem, secondClass) {
     var li = document.createElement('li');
     li.classList.add('popup__feature');
     li.classList.add('popup__feature--' + secondClass + '');
-    el.insertAdjacentElement('afterbegin', li);
+    elem.insertAdjacentElement('afterbegin', li);
   };
 
-  var createImgElement = function (el, imgSrc) {
+  var createImgElement = function (elem, imgSrc) {
     var img = document.createElement('img');
     img.classList.add('popup__photo');
     img.width = '45';
     img.height = '40';
     img.alt = 'Фотография жилья';
     img.src = imgSrc;
-    el.insertAdjacentElement('afterbegin', img);
+    elem.insertAdjacentElement('afterbegin', img);
   };
 
-  var renderCard = function (info) {
+  var createCardElement = function (info) {
     cardModule.querySelector('.popup__title').innerText = info.offer.title;
     cardModule.querySelector('.popup__text--address').innerText = info.offer.address;
     cardModule.querySelector('.popup__text--price').innerText = info.offer.price + '₽/ночь';
@@ -56,49 +56,50 @@
     var cardPhotos = cardModule.querySelector('.popup__photos');
     cardModule.querySelector('.popup__avatar').src = info.author.avatar;
     cardFeature.innerHTML = '';
-    for (var j = 0; j < info.offer.features.length; j++) {
-      createLiElement(cardFeature, info.offer.features[j]);
+    for (var i = 0; i < info.offer.features.length; i++) {
+      createLiElement(cardFeature, info.offer.features[i]);
     }
     cardPhotos.innerHTML = '';
-    for (var i = 0; i < info.offer.photos.length; i++) {
-      createImgElement(cardPhotos, info.offer.photos[i]);
+    for (var j = 0; j < info.offer.photos.length; j++) {
+      createImgElement(cardPhotos, info.offer.photos[j]);
     }
     cardModule.classList.add('hidden');
     return cardModule;
   };
 
-  var detectedCard = function (pinsArr, elem) {
+  var detectionCard = function (pinsArr, elem) {
     var parsedElX = parseInt(elem.dataset.keyPinX, 10);
     var parsedElY = parseInt(elem.dataset.keyPinY, 10);
-    for (var j = 0; j < pinsArr.length; j++) {
-      if (parsedElX === pinsArr[j].location.x && parsedElY === pinsArr[j].location.y) {
-        return pinsArr[j];
-      }
-    }
-    return pinsArr;
+    var filteredPins;
+    filteredPins = pinsArr.filter(function (it) {
+      return ((it.location.x === parsedElX) && (it.location.y === parsedElY));
+    });
+    return filteredPins[0];
   };
 
-  window.card = function (info) {
-    renderCard(info);
+  var renderCard = function (info) {
+    createCardElement(info);
     map.insertBefore(cardModule, filtersContainer);
     var closeButton = map.querySelector('.popup__close');
     closeButton.addEventListener('click', function () {
-      window.closePopup();
+      closePopup();
     });
 
     closeButton.addEventListener('keydown', function (evt) {
-      window.util.isEnterEvent(evt, window.closePopup);
+      window.util.isEnterEvent(evt, closePopup);
     });
     document.addEventListener('keydown', onPopupEscPress);
   };
 
-  window.addListenersOnPin = function (pinsArr) {
-    var selectPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = 0; i < selectPins.length; i++) {
-      selectPins[i].addEventListener('click', function (evt) {
-        window.card(detectedCard(pinsArr, evt.currentTarget));
-        window.openPopup();
-      });
+  window.card = {
+    addListenersOnPin: function (pinsArr) {
+      var selectedPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
+      for (var l = 0; l < selectedPins.length; l++) {
+        selectedPins[l].addEventListener('click', function (evt) {
+          renderCard(detectionCard(pinsArr, evt.currentTarget));
+          openPopup();
+        });
+      }
     }
   };
 })();

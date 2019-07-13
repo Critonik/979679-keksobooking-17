@@ -1,12 +1,12 @@
 'use strict';
 (function () {
   var pinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-  var pin = [];
+  var pins = [];
   var map = document.querySelector('.map');
   var mapPinsElement = map.querySelector('.map__pins');
   var housingType = map.querySelector('#housing-type');
 
-  var setInfoAboutPins = function (info) {
+  var createPinsWithInfo = function (info) {
     var pinElement = pinsTemplate.cloneNode(true);
     var pinElementImg = pinElement.querySelector('img');
     pinElementImg.src = info.author.avatar;
@@ -18,47 +18,41 @@
     return pinElement;
   };
 
-  var createPins = function (pins) {
-    var takeNumber = pins.length > 5 ? 5 : pins.length;
+  var createPins = function (elem) {
+    var takeNumber = elem.length > 5 ? 5 : elem.length;
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < takeNumber; i++) {
-      fragment.appendChild(setInfoAboutPins(pins[i]));
+      fragment.appendChild(createPinsWithInfo(elem[i]));
     }
     mapPinsElement.appendChild(fragment);
   };
 
-  window.deletePins = function () {
-    var pisnToDelete = map.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var j = 0; j < pisnToDelete.length; j++) {
-      pisnToDelete[j].parentNode.removeChild(pisnToDelete[j]);
-    }
-  };
-
-  window.updatePins = function (type) {
-    var pinCopy = pin.slice();
-    createPins(pinCopy);
-    var filteredPins;
-    if (type !== 'any') {
-      filteredPins = pinCopy.filter(function (it) {
-        return it.offer.type === type;
-      });
-      window.deletePins();
-      createPins(filteredPins);
-    }
-    window.addListenersOnPin(pinCopy);
-  };
-
-  window.createPinOnMap = function () {
-    var successHandler = function (data) {
-      var typeOfHouse = document.getElementById('housing-type').value;
-      pin = data;
-      window.debounce(function () {
-        window.updatePins(typeOfHouse);
-      });
-    };
-
-    window.onError = function () {
+  window.render = {
+    deletePins: function () {
+      var deletedPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
+      for (var j = 0; j < deletedPins.length; j++) {
+        deletedPins[j].parentNode.removeChild(deletedPins[j]);
+      }
+    },
+    updatePins: function (type) {
+      var popupCard = document.querySelector('.popup');
+      if (popupCard) {
+        popupCard.classList.add('hidden');
+      }
+      var pinsCopy = pins.slice();
+      createPins(pinsCopy);
+      var filteredPins;
+      if (type !== 'any') {
+        filteredPins = pinsCopy.filter(function (it) {
+          return it.offer.type === type;
+        });
+        window.render.deletePins();
+        createPins(filteredPins);
+      }
+      window.card.addListenersOnPin(pinsCopy);
+    },
+    onError: function () {
       var errorBlock = document.querySelector('#error').content.querySelector('.error');
       var errorModule = errorBlock.cloneNode(true);
       map.appendChild(errorModule);
@@ -66,15 +60,24 @@
       errorButton.addEventListener('click', function () {
         location.reload();
       });
-    };
-    window.load(successHandler, window.onError);
+    },
+    createPinOnMap: function () {
+      var successHandler = function (data) {
+        var typeOfHouse = document.getElementById('housing-type').value;
+        pins = data;
+        window.util.debounce(function () {
+          window.render.updatePins(typeOfHouse);
+        });
+      };
+      window.backend.load(successHandler, window.render.onError);
+    }
   };
 
   housingType.addEventListener('change', function (evt) {
     evt.preventDefault();
     var typeOfHouse = document.getElementById('housing-type').value;
-    window.debounce(function () {
-      window.updatePins(typeOfHouse);
+    window.util.debounce(function () {
+      window.render.updatePins(typeOfHouse);
     });
   });
 })();
