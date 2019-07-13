@@ -8,7 +8,6 @@
   var YMIN = 130;
   var YMAX = 630;
   var offersLoaded = false;
-
   window.util.blockForm(adForm);
   window.util.blockForm(mapFilters);
 
@@ -16,8 +15,8 @@
     return elem.offsetTop + elem.offsetHeight;
   };
 
-  var getPinPositionLeft = function (el) {
-    return el.offsetLeft + (el.offsetWidth / 2);
+  var getPinPositionLeft = function (elem) {
+    return elem.offsetLeft + (elem.offsetWidth / 2);
   };
 
   var setAdress = function (element) {
@@ -27,7 +26,7 @@
   setAdress(mainPin);
 
 
-  var pinMove = function (evt) {
+  var observeMovePin = function (evt) {
     evt.preventDefault();
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
@@ -73,7 +72,7 @@
       setAdress(mainPin);
 
       if (!offersLoaded) {
-        window.createPinOnMap();
+        window.render.createPinOnMap();
       }
 
       offersLoaded = true;
@@ -91,5 +90,5 @@
     document.addEventListener('mouseup', onMouseUp);
   };
 
-  mainPin.addEventListener('mousedown', pinMove);
+  mainPin.addEventListener('mousedown', observeMovePin);
 })();

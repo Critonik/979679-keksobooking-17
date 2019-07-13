@@ -28,28 +28,38 @@
     window.util.changePrice(evt.target.value, priceInput, OfferToValue);
   });
 
+  priceInput.addEventListener('input', function (evt) {
+    evt.preventDefault();
+    var placeTypeValue = placeType.value;
+    var minPrice = OfferToValue[placeTypeValue];
+    if (event.target.value < minPrice) {
+      event.target.setCustomValidity('Цена должны быть не меньше ' + minPrice + ' рублей');
+    } else {
+      event.target.setCustomValidity('');
+    }
+  });
+
   var onFieldRoomsChange = function (value) {
-    var availableOptions = GuestsByRoom[value];
     optionsGuests.forEach(function (option) {
-      option.disabled = availableOptions.indexOf(option.value) === -1;
+      option.disabled = GuestsByRoom[value].indexOf(option.value) === -1;
     });
   };
 
   var onFieldGuestsValidity = function (value) {
-    var availableOptions = GuestsByRoom[value];
-    if (availableOptions.indexOf(guestNumber.value) === -1) {
+    if (GuestsByRoom[value].indexOf(guestNumber.value) === -1) {
       guestNumber.setCustomValidity('Укажите другое количество гостей');
     }
-    guestNumber.addEventListener('change', function () {
-      if (availableOptions.indexOf(guestNumber.value) !== -1) {
-        guestNumber.setCustomValidity('');
-      }
-    });
   };
 
+  guestNumber.addEventListener('change', function () {
+    if (GuestsByRoom[roomNumber.value].indexOf(event.target.value) !== -1) {
+      guestNumber.setCustomValidity('');
+    }
+  });
+
   roomNumber.addEventListener('change', function () {
-    onFieldRoomsChange(roomNumber.value);
-    onFieldGuestsValidity(roomNumber.value);
+    onFieldRoomsChange(event.target.value);
+    onFieldGuestsValidity(event.target.value);
   });
 
   window.util.syncPlace(arrivalTime, departureTime);
