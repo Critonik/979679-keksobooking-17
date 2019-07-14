@@ -11,6 +11,7 @@
   var mainPin = document.querySelector('.map__pin--main');
   var mapFilters = document.querySelector('.map__filters');
   var map = document.querySelector('.map');
+  var resetButton = adForm.querySelector('.ad-form__reset');
 
   var OfferToValue = {
     bungalo: 0,
@@ -93,13 +94,11 @@
     document.removeEventListener('keydown', onSuccessEscPress);
   };
 
-  var onSuccess = function () {
-    var successBlock = document.querySelector('#success').content.querySelector('.success');
-    var successModule = successBlock.cloneNode(true);
-    var main = document.querySelector('.main');
-    main.appendChild(successModule);
-    document.addEventListener('keydown', onSuccessEscPress);
-    document.addEventListener('click', closePopupSuccess);
+  var clearForm = function () {
+  var popupCard = document.querySelector('.popup');
+    if (popupCard) {
+      popupCard.classList.add('hidden');
+    }
     window.util.blockForm(adForm);
     window.util.blockForm(mapFilters);
     map.classList.add('map--faded');
@@ -108,6 +107,16 @@
     window.render.deletePins();
     window.map.setAdress(mainPin);
     setDefaultPosition();
+  }
+
+  var onSuccess = function () {
+    clearForm();
+    var successBlock = document.querySelector('#success').content.querySelector('.success');
+    var successModule = successBlock.cloneNode(true);
+    var main = document.querySelector('.main');
+    main.appendChild(successModule);
+    document.addEventListener('keydown', onSuccessEscPress);
+    document.addEventListener('click', closePopupSuccess);
   };
 
   var onError = function (errorMessage) {
@@ -127,5 +136,9 @@
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.backend.save(new FormData(adForm), onSuccess, onError);
+  });
+
+  resetButton.addEventListener('click', function () {
+    clearForm();
   });
 })();
