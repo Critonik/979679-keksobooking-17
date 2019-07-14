@@ -52,10 +52,11 @@
       }
       window.card.addListenersOnPin(pinsCopy);
     },
-    onError: function () {
+    onError: function (errorMessage) {
       var errorBlock = document.querySelector('#error').content.querySelector('.error');
       var errorModule = errorBlock.cloneNode(true);
       map.appendChild(errorModule);
+      errorBlock.textContent = errorMessage;
       var errorButton = map.querySelector('.error__button');
       errorButton.addEventListener('click', function () {
         location.reload();

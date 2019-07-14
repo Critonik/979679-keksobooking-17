@@ -8,6 +8,7 @@
   var roomNumber = adForm.querySelector('#room_number');
   var guestNumber = adForm.querySelector('#capacity');
   var optionsGuests = guestNumber.querySelectorAll('option');
+  var mainPin = document.querySelector('.map__pin--main');
 
   var OfferToValue = {
     bungalo: 0,
@@ -64,4 +65,61 @@
 
   window.util.syncPlace(arrivalTime, departureTime);
   window.util.syncPlace(departureTime, arrivalTime);
+
+  var setDefaultPosition = function () {
+    mainPin.style.left = '570px';
+    mainPin.style.top = '375px';
+  };
+
+  var onErrorEscPress = function (evt) {
+    window.util.isEscEvent(evt, closePopup);
+  };
+
+  var onSuccessEscPress = function (evt) {
+    window.util.isEscEvent(evt, closePopupSuccess);
+  };
+
+  var closePopup = function () {
+    var errorCard = document.querySelector('.error');
+    errorCard.classList.add('hidden');
+    document.removeEventListener('keydown', onErrorEscPress);
+  };
+
+  var closePopupSuccess = function () {
+    var successCard = document.querySelector('.success');
+    successCard.classList.add('hidden');
+    document.removeEventListener('keydown', onSuccessEscPress);
+  };
+
+  var onSuccess = function () {
+    var successBlock = document.querySelector('#success').content.querySelector('.success');
+    var successModule = successBlock.cloneNode(true);
+    var main = document.querySelector('.main');
+    main.appendChild(successModule);
+    document.addEventListener('keydown', onSuccessEscPress);
+    document.addEventListener('click', closePopupSuccess);
+    adForm.reset();
+    window.render.deletePins();
+    window.map.setAdress(mainPin);
+    setDefaultPosition();
+  };
+
+  var onError = function (errorMessage) {
+    var errorBlock = document.querySelector('#error').content.querySelector('.error');
+    var errorModule = errorBlock.cloneNode(true);
+    var main = document.querySelector('.main');
+    main.appendChild(errorModule);
+    errorBlock.textContent = errorMessage;
+    var errorButton = main.querySelector('.error__button');
+    errorButton.addEventListener('click', function () {
+      closePopup();
+    });
+    document.addEventListener('keydown', onErrorEscPress);
+    document.addEventListener('click', closePopup);
+  };
+
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(adForm), onSuccess, onError);
+  });
 })();

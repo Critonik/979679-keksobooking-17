@@ -19,11 +19,13 @@
     return elem.offsetLeft + (elem.offsetWidth / 2);
   };
 
-  var setAdress = function (element) {
-    address.value = getPinPositionLeft(element) + ', ' + getPinPositionTop(element);
+  window.map = {
+    setAdress: function (element) {
+      address.value = getPinPositionLeft(element) + ', ' + getPinPositionTop(element);
+    }
   };
 
-  setAdress(mainPin);
+  window.map.setAdress(mainPin);
 
 
   var observeMovePin = function (evt) {
@@ -69,7 +71,7 @@
         mainPin.style.top = (YMIN - mainPin.offsetHeight) + 'px';
       }
 
-      setAdress(mainPin);
+      window.map.setAdress(mainPin);
 
       if (!offersLoaded) {
         window.render.createPinOnMap();
@@ -80,7 +82,7 @@
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-      setAdress(mainPin);
+      window.map.setAdress(mainPin);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
