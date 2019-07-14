@@ -84,13 +84,13 @@
 
   var closePopup = function () {
     var errorCard = document.querySelector('.error');
-    errorCard.classList.add('hidden');
+    errorCard.remove();
     document.removeEventListener('keydown', onErrorEscPress);
   };
 
   var closePopupSuccess = function () {
     var successCard = document.querySelector('.success');
-    successCard.classList.add('hidden');
+    successCard.remove();
     document.removeEventListener('keydown', onSuccessEscPress);
   };
 
