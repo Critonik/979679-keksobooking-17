@@ -95,7 +95,7 @@
   };
 
   var clearForm = function () {
-  var popupCard = document.querySelector('.popup');
+    var popupCard = document.querySelector('.popup');
     if (popupCard) {
       popupCard.classList.add('hidden');
     }
@@ -107,7 +107,7 @@
     window.render.deletePins();
     window.map.setAdress(mainPin);
     setDefaultPosition();
-  }
+  };
 
   var onSuccess = function () {
     clearForm();
