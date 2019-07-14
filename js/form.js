@@ -9,6 +9,8 @@
   var guestNumber = adForm.querySelector('#capacity');
   var optionsGuests = guestNumber.querySelectorAll('option');
   var mainPin = document.querySelector('.map__pin--main');
+  var mapFilters = document.querySelector('.map__filters');
+  var map = document.querySelector('.map');
 
   var OfferToValue = {
     bungalo: 0,
@@ -98,6 +100,10 @@
     main.appendChild(successModule);
     document.addEventListener('keydown', onSuccessEscPress);
     document.addEventListener('click', closePopupSuccess);
+    window.util.blockForm(adForm);
+    window.util.blockForm(mapFilters);
+    map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
     adForm.reset();
     window.render.deletePins();
     window.map.setAdress(mainPin);
