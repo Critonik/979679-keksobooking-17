@@ -54,10 +54,24 @@
   var filteringPinsByPrice = function (copy) {
     var housingPriceType = housingPrice.value;
     var filteredPinsByPrice;
-    if (housingPriceType !== 'any') {
-      filteredPinsByPrice = copy.filter(function (it) {
-        return it.offer.price === housingPriceType;
-      });
+    switch (housingPriceType) {
+      case 'any':
+        break;
+      case 'middle':
+        filteredPinsByPrice = copy.filter(function (it) {
+          return (it.offer.price >= 10000 && it.offer.price < 50000);
+        });
+        break;
+      case 'low':
+        filteredPinsByPrice = copy.filter(function (it) {
+          return it.offer.price < 10000;
+        });
+        break;
+      case 'high':
+        filteredPinsByPrice = copy.filter(function (it) {
+          return it.offer.price > 50000;
+        });
+        break;
     }
     return filteredPinsByPrice;
   };
@@ -65,10 +79,24 @@
   var filteringPinsByRooms = function (copy) {
     var housingRoomsType = housingRooms.value;
     var filteredPinsByRooms;
-    if (housingRoomsType !== 'any') {
-      filteredPinsByRooms = copy.filter(function (it) {
-        return it.offer.rooms === housingRoomsType;
-      });
+    switch (housingRoomsType) {
+      case 'any':
+        break;
+      case '1':
+        filteredPinsByRooms = copy.filter(function (it) {
+          return it.offer.rooms === 1;
+        });
+        break;
+      case '2':
+        filteredPinsByRooms = copy.filter(function (it) {
+          return it.offer.rooms === 2;
+        });
+        break;
+      case '3':
+        filteredPinsByRooms = copy.filter(function (it) {
+          return it.offer.rooms === 3;
+        });
+        break;
     }
     return filteredPinsByRooms;
   };
@@ -77,10 +105,24 @@
   var filteringPinsByGuests = function (copy) {
     var housingGuestsType = housingGuests.value;
     var filteredPinsByGuests;
-    if (housingGuestsType !== 'any') {
-      filteredPinsByGuests = copy.filter(function (it) {
-        return it.offer.guests === housingGuestsType;
-      });
+    switch (housingGuestsType) {
+      case 'any':
+        break;
+      case '1':
+        filteredPinsByGuests = copy.filter(function (it) {
+          return it.offer.guests === 1;
+        });
+        break;
+      case '2':
+        filteredPinsByGuests = copy.filter(function (it) {
+          return it.offer.guests === 2;
+        });
+        break;
+      case '0':
+        filteredPinsByGuests = copy.filter(function (it) {
+          return it.offer.guests === 0;
+        });
+        break;
     }
     return filteredPinsByGuests;
   };
@@ -94,7 +136,7 @@
 
     var filteredPinsByFeatures;
     filteredPinsByFeatures = copy.filter(function (it) {
-      return it.offer.features === selectedFeatureValues;
+      return it.offer.features === selectedFeatureValues; // и тут я затупил
     });
     return filteredPinsByFeatures;
   };
@@ -111,6 +153,9 @@
       var pinsCopy = pins.slice();
       window.render.deletePins();
       var filter = (filteringPinsByType(pinsCopy).concat(filteringPinsByPrice(pinsCopy)).concat(filteringPinsByRooms(pinsCopy)).concat(filteringPinsByGuests(pinsCopy)).concat(filteringPinsByFeatures(pinsCopy)));
+      filter = filter.filter(function (x) {
+        return x !== undefined && x !== null;
+      });
       createPins(filter);
       window.card.addListenersOnPin(pinsCopy);
     },
