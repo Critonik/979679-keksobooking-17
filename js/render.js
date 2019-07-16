@@ -10,6 +10,7 @@
   var housingGuests = map.querySelector('#housing-guests');
   var housingFeatures = map.querySelector('#housing-features');
 
+
   var createPinsWithInfo = function (info) {
     var pinElement = pinsTemplate.cloneNode(true);
     var pinElementImg = pinElement.querySelector('img');
@@ -20,6 +21,30 @@
     pinElement.setAttribute('data-key-pin-X', info.location.x);
     pinElement.setAttribute('data-key-pin-Y', info.location.y);
     return pinElement;
+  };
+
+  var PricesFuncMin = {
+    middle: 10000,
+    low: null,
+    high: 50000
+  };
+
+  var PricesFuncMax = {
+    middle: 50000,
+    low: 10000,
+    high: null
+  };
+
+  var RoomQuantity = {
+    1: 1,
+    2: 2,
+    3: 3
+  };
+
+  var GuestQuantity = {
+    1: 1,
+    2: 2,
+    0: 0
   };
 
   var deleteCard = function () {
@@ -38,93 +63,6 @@
       fragment.appendChild(createPinsWithInfo(elem[i]));
     }
     mapPinsElement.appendChild(fragment);
-  };
-
-  var filteringPinsByType = function (copy) {
-    var typeOfHouse = housingType.value;
-    var filteredPins;
-    if (typeOfHouse !== 'any') {
-      filteredPins = copy.filter(function (it) {
-        return it.offer.type === typeOfHouse;
-      });
-    }
-    return filteredPins;
-  };
-
-  var filteringPinsByPrice = function (copy) {
-    var housingPriceType = housingPrice.value;
-    var filteredPinsByPrice;
-    switch (housingPriceType) {
-      case 'any':
-        break;
-      case 'middle':
-        filteredPinsByPrice = copy.filter(function (it) {
-          return (it.offer.price >= 10000 && it.offer.price < 50000);
-        });
-        break;
-      case 'low':
-        filteredPinsByPrice = copy.filter(function (it) {
-          return it.offer.price < 10000;
-        });
-        break;
-      case 'high':
-        filteredPinsByPrice = copy.filter(function (it) {
-          return it.offer.price > 50000;
-        });
-        break;
-    }
-    return filteredPinsByPrice;
-  };
-
-  var filteringPinsByRooms = function (copy) {
-    var housingRoomsType = housingRooms.value;
-    var filteredPinsByRooms;
-    switch (housingRoomsType) {
-      case 'any':
-        break;
-      case '1':
-        filteredPinsByRooms = copy.filter(function (it) {
-          return it.offer.rooms === 1;
-        });
-        break;
-      case '2':
-        filteredPinsByRooms = copy.filter(function (it) {
-          return it.offer.rooms === 2;
-        });
-        break;
-      case '3':
-        filteredPinsByRooms = copy.filter(function (it) {
-          return it.offer.rooms === 3;
-        });
-        break;
-    }
-    return filteredPinsByRooms;
-  };
-
-
-  var filteringPinsByGuests = function (copy) {
-    var housingGuestsType = housingGuests.value;
-    var filteredPinsByGuests;
-    switch (housingGuestsType) {
-      case 'any':
-        break;
-      case '1':
-        filteredPinsByGuests = copy.filter(function (it) {
-          return it.offer.guests === 1;
-        });
-        break;
-      case '2':
-        filteredPinsByGuests = copy.filter(function (it) {
-          return it.offer.guests === 2;
-        });
-        break;
-      case '0':
-        filteredPinsByGuests = copy.filter(function (it) {
-          return it.offer.guests === 0;
-        });
-        break;
-    }
-    return filteredPinsByGuests;
   };
 
   var filteringPinsByFeatures = function (copy) {
@@ -149,13 +87,46 @@
       }
     },
     updatePins: function () {
-      deleteCard();
       var pinsCopy = pins.slice();
+      deleteCard();
       window.render.deletePins();
-      var filter = (filteringPinsByType(pinsCopy).concat(filteringPinsByPrice(pinsCopy)).concat(filteringPinsByRooms(pinsCopy)).concat(filteringPinsByGuests(pinsCopy)).concat(filteringPinsByFeatures(pinsCopy)));
-      filter = filter.filter(function (x) {
-        return x !== undefined && x !== null;
-      });
+      var filter = pinsCopy.filter(function (it) {
+        if (housingType.value !== 'any') {
+          return it.offer.type === housingType.value;
+        }
+        return pinsCopy;
+      })
+      .filter(function (it) {
+        var housingPriceType = housingPrice.value;
+        if (housingPriceType !== 'any') {
+          if (housingPriceType === 'high') {
+            return it.offer.price >= PricesFuncMin[housingPriceType];
+          }
+          return (it.offer.price >= PricesFuncMin[housingPriceType] && it.offer.price < PricesFuncMax[housingPriceType]);
+        }
+        return pinsCopy;
+      })
+      .filter(function (it) {
+        var housingRoomsType = housingRooms.value;
+        if (housingRoomsType !== 'any') {
+          return it.offer.rooms === RoomQuantity[housingRoomsType];
+        }
+        return pinsCopy;
+      })
+      .filter(function (it) {
+        var housingGuestsValue = housingGuests.value;
+        if (housingGuestsValue !== 'any') {
+          return it.offer.guests === GuestQuantity[housingGuestsValue];
+        }
+        return pinsCopy;
+      })
+      /* .filter(getFeaturesFilterChange(wifiFilter, 'wifi'))
+       .filter(getFeaturesFilterChange(dishwasherFilter, 'dishwasher'))
+      .filter(getFeaturesFilterChange(parkingFilter, 'parking'))
+      .filter(getFeaturesFilterChange(washerFilter, 'washer'))
+      .filter(getFeaturesFilterChange(elevatorFilter, 'elevator'))
+      .filter(getFeaturesFilterChange(conditionerFilter, 'conditioner'))*/;
+
       createPins(filter);
       window.card.addListenersOnPin(pinsCopy);
     },
@@ -180,6 +151,27 @@
   };
 
   housingType.addEventListener('change', function (evt) {
+    evt.preventDefault();
+    window.util.debounce(function () {
+      window.render.updatePins();
+    });
+  });
+
+  housingPrice.addEventListener('change', function (evt) {
+    evt.preventDefault();
+    window.util.debounce(function () {
+      window.render.updatePins();
+    });
+  });
+
+  housingRooms.addEventListener('change', function (evt) {
+    evt.preventDefault();
+    window.util.debounce(function () {
+      window.render.updatePins();
+    });
+  });
+
+  housingGuests.addEventListener('change', function (evt) {
     evt.preventDefault();
     window.util.debounce(function () {
       window.render.updatePins();
