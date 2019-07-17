@@ -95,7 +95,7 @@
     addListenersOnPin: function (pinsArr) {
       var selectedPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
       for (var l = 0; l < selectedPins.length; l++) {
-        selectedPins[l].addEventListener('click', function (evt) {
+        selectedPins[l].addEventListener('change', function (evt) {
           renderCard(detectionCard(pinsArr, evt.currentTarget));
           openPopup();
         });

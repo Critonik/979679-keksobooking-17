@@ -10,7 +10,6 @@
   var housingGuests = map.querySelector('#housing-guests');
   var housingFeatures = map.querySelector('#housing-features');
 
-
   var createPinsWithInfo = function (info) {
     var pinElement = pinsTemplate.cloneNode(true);
     var pinElementImg = pinElement.querySelector('img');
@@ -65,20 +64,6 @@
     mapPinsElement.appendChild(fragment);
   };
 
-  var filteringPinsByFeatures = function (copy) {
-    var housingFeaturesArray = housingFeatures.querySelectorAll('input[name="features"]:checked');
-    var features = Array.from(housingFeaturesArray);
-    var selectedFeatureValues = features.map(function (it) {
-      return it.value;
-    });
-
-    var filteredPinsByFeatures;
-    filteredPinsByFeatures = copy.filter(function (it) {
-      return it.offer.features === selectedFeatureValues; // и тут я затупил
-    });
-    return filteredPinsByFeatures;
-  };
-
   window.render = {
     deletePins: function () {
       var deletedPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
@@ -86,7 +71,9 @@
         deletedPins[j].parentNode.removeChild(deletedPins[j]);
       }
     },
-    updatePins: function () {
+    updatePins: function (selectedFeatureValues) {
+
+      window.card.addListenersOnPin(pinsCopy);
       var pinsCopy = pins.slice();
       deleteCard();
       window.render.deletePins();
@@ -120,12 +107,12 @@
         }
         return pinsCopy;
       })
-      /* .filter(getFeaturesFilterChange(wifiFilter, 'wifi'))
-       .filter(getFeaturesFilterChange(dishwasherFilter, 'dishwasher'))
-      .filter(getFeaturesFilterChange(parkingFilter, 'parking'))
-      .filter(getFeaturesFilterChange(washerFilter, 'washer'))
-      .filter(getFeaturesFilterChange(elevatorFilter, 'elevator'))
-      .filter(getFeaturesFilterChange(conditionerFilter, 'conditioner'))*/;
+      .filter(function (it) {
+        if (selectedFeatureValues) {
+          return it.offer.features.indexOf(selectedFeatureValues) >= 0;
+        }
+        return pinsCopy;
+      });
 
       createPins(filter);
       window.card.addListenersOnPin(pinsCopy);
@@ -178,4 +165,16 @@
     });
   });
 
+  var addListenerOnCheckbox = function () {
+    var housingFeaturesArray = housingFeatures.querySelectorAll('input[name="features"]');
+    for (var i = 0; i < housingFeaturesArray.length; i++) {
+      housingFeaturesArray[i].addEventListener('change', function (evt) {
+        evt.preventDefault();
+        window.util.debounce(function () {
+          window.render.updatePins(evt.target.value);
+        });
+      });
+    }
+  };
+  addListenerOnCheckbox();
 })();
