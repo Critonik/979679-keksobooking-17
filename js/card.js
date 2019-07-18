@@ -95,11 +95,18 @@
     addListenersOnPin: function (pinsArr) {
       var selectedPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
       for (var l = 0; l < selectedPins.length; l++) {
-        selectedPins[l].addEventListener('change', function (evt) {
+        selectedPins[l].addEventListener('click', function (evt) {
           renderCard(detectionCard(pinsArr, evt.currentTarget));
           openPopup();
         });
       }
+    },
+    deleteCard: function () {
+      var popupCard = document.querySelector('.popup');
+      if (popupCard) {
+        popupCard.classList.add('hidden');
+      }
+      return;
     }
   };
 })();
