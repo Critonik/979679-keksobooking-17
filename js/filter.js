@@ -41,7 +41,7 @@
         return pinsCopy;
       })
       .filter(function (it) {
-        return housingRooms.value !== 'any' ? it.offer.rooms === housingRooms.value : pinsCopy;
+        return housingRooms.value !== 'any' ? it.offer.rooms === +housingRooms.value : pinsCopy;
       })
       .filter(function (it) {
         if (housingGuests.value !== 'any') {
