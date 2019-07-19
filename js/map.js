@@ -7,7 +7,7 @@
   var address = document.getElementById('address');
   var YMIN = 130;
   var YMAX = 630;
-  var offersLoaded = false;
+  //var offersLoaded = false;
   window.util.blockForm(adForm);
   window.util.blockForm(mapFilters);
 
@@ -22,7 +22,8 @@
   window.map = {
     setAdress: function (element) {
       address.value = getPinPositionLeft(element) + ', ' + getPinPositionTop(element);
-    }
+    },
+    offersLoaded: false
   };
 
   window.map.setAdress(mainPin);
@@ -33,7 +34,6 @@
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
     window.util.unblockForm(adForm, 'disabled');
-    window.util.unblockForm(mapFilters, 'disabled');
 
     var startCoords = {
       x: evt.clientX,
@@ -73,11 +73,11 @@
 
       window.map.setAdress(mainPin);
 
-      if (!offersLoaded) {
+      if (!window.map.offersLoaded) {
         window.render.createPinOnMap();
       }
 
-      offersLoaded = true;
+      window.map.offersLoaded = true;
     };
 
     var onMouseUp = function (upEvt) {
