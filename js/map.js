@@ -7,7 +7,6 @@
   var address = document.getElementById('address');
   var YMIN = 130;
   var YMAX = 630;
-  //var offersLoaded = false;
   window.util.blockForm(adForm);
   window.util.blockForm(mapFilters);
 
