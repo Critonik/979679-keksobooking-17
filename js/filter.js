@@ -7,6 +7,12 @@
   var housingRooms = map.querySelector('#housing-rooms');
   var housingGuests = map.querySelector('#housing-guests');
   var housingFeatures = map.querySelector('#housing-features');
+  var checkWifi = housingFeatures.querySelector('input[value="wifi"]');
+  var checkDishwasher = housingFeatures.querySelector('input[value="dishwasher"]');
+  var checkParking = housingFeatures.querySelector('input[value="parking"]');
+  var checkWasher = housingFeatures.querySelector('input[value="washer"]');
+  var checkElevator = housingFeatures.querySelector('input[value="elevator"]');
+  var checkConditioner = housingFeatures.querySelector('input[value="conditioner"]');
 
   var PricesFuncMin = {
     middle: 10000,
@@ -20,97 +26,49 @@
     high: null
   };
 
-  var RoomQuantity = {
-    1: 1,
-    2: 2,
-    3: 3
-  };
-
-  var GuestQuantity = {
-    1: 1,
-    2: 2,
-    0: 0
-  };
-
   window.filter = {
     filtering: function (pinsCopy) {
       var filteredPins = pinsCopy.filter(function (it) {
-        if (housingType.value !== 'any') {
-          return it.offer.type === housingType.value;
-        }
-        return pinsCopy;
+        return housingType.value !== 'any' ? it.offer.type === housingType.value : pinsCopy;
       })
       .filter(function (it) {
-        var housingPriceType = housingPrice.value;
-        if (housingPriceType !== 'any') {
-          if (housingPriceType === 'high') {
-            return it.offer.price >= PricesFuncMin[housingPriceType];
+        if (housingPrice.value !== 'any') {
+          if (housingPrice.value === 'high') {
+            return it.offer.price >= PricesFuncMin[housingPrice.value];
           }
-          return (it.offer.price >= PricesFuncMin[housingPriceType] && it.offer.price < PricesFuncMax[housingPriceType]);
+          return (it.offer.price >= PricesFuncMin[housingPrice.value] && it.offer.price < PricesFuncMax[housingPrice.value]);
         }
         return pinsCopy;
       })
       .filter(function (it) {
-        var housingRoomsType = housingRooms.value;
-        if (housingRoomsType !== 'any') {
-          return it.offer.rooms === RoomQuantity[housingRoomsType];
+        return housingRooms.value !== 'any' ? it.offer.rooms === housingRooms.value : pinsCopy;
+      })
+      .filter(function (it) {
+        if (housingGuests.value !== 'any') {
+          if (housingGuests.value === '0') {
+            return it.offer.guests === +housingGuests.value;
+          }
+          return it.offer.guests >= +housingGuests.value;
         }
         return pinsCopy;
       })
       .filter(function (it) {
-        var housingGuestsValue = housingGuests.value;
-        if (housingGuestsValue !== 'any') {
-          return it.offer.guests === GuestQuantity[housingGuestsValue];
-        }
-        return pinsCopy;
+        return checkWifi.checked ? it.offer.features.indexOf(checkWifi.value) >= 0 : pinsCopy;
       })
       .filter(function (it) {
-        var checkWifi = housingFeatures.querySelector('input[value="wifi"]');
-        var checkWifiValue = checkWifi.value;
-        if (checkWifi.checked) {
-          return it.offer.features.indexOf(checkWifiValue) >= 0;
-        }
-        return pinsCopy;
+        return checkDishwasher.checked ? it.offer.features.indexOf(checkDishwasher.value) >= 0 : pinsCopy;
       })
       .filter(function (it) {
-        var checkDishwasher = housingFeatures.querySelector('input[value="dishwasher"]');
-        var checkDishwasherValue = checkDishwasher.value;
-        if (checkDishwasher.checked) {
-          return it.offer.features.indexOf(checkDishwasherValue) >= 0;
-        }
-        return pinsCopy;
+        return checkParking.checked ? it.offer.features.indexOf(checkParking.value) >= 0 : pinsCopy;
       })
       .filter(function (it) {
-        var checkParking = housingFeatures.querySelector('input[value="parking"]');
-        var checkParkingValue = checkParking.value;
-        if (checkParking.checked) {
-          return it.offer.features.indexOf(checkParkingValue) >= 0;
-        }
-        return pinsCopy;
+        return checkWasher.checked ? it.offer.features.indexOf(checkWasher.value) >= 0 : pinsCopy;
       })
       .filter(function (it) {
-        var checkWasher = housingFeatures.querySelector('input[value="washer"]');
-        var checkWasherValue = checkWasher.value;
-        if (checkWasher.checked) {
-          return it.offer.features.indexOf(checkWasherValue) >= 0;
-        }
-        return pinsCopy;
+        return checkElevator.checked ? it.offer.features.indexOf(checkElevator.value) >= 0 : pinsCopy;
       })
       .filter(function (it) {
-        var checkElevator = housingFeatures.querySelector('input[value="elevator"]');
-        var checkElevatorValue = checkElevator.value;
-        if (checkElevator.checked) {
-          return it.offer.features.indexOf(checkElevatorValue) >= 0;
-        }
-        return pinsCopy;
-      })
-      .filter(function (it) {
-        var checkConditioner = housingFeatures.querySelector('input[value="conditioner"]');
-        var checkConditionerValue = checkConditioner.value;
-        if (checkConditioner.checked) {
-          return it.offer.features.indexOf(checkConditionerValue) >= 0;
-        }
-        return pinsCopy;
+        return checkConditioner.checked ? it.offer.features.indexOf(checkConditioner.value) >= 0 : pinsCopy;
       });
       window.render.createPins(filteredPins);
     }
