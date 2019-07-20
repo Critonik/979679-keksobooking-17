@@ -60,14 +60,11 @@
 
   dropZoneForAvatar.addEventListener('drop', handleDrop, false);
 
-  var handleFiles = function (files) {
-    files.forEach(previewFile);
-  };
 
   var handleDrop = function (e) {
     var data = e.dataTransfer;
     var files = data.files;
-    handleFiles(files);
+    previewFile(files[0]);
   };
 
   fileChooserForAvatar.addEventListener('change', function (evt) {
