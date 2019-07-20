@@ -3,6 +3,7 @@
 (function () {
   var LOAD_URL = 'https://js.dump.academy/keksobooking/data';
   var SAVE_URL = 'https://js.dump.academy/keksobooking';
+  var mapFilters = document.querySelector('.map__filters');
   window.backend = {
     load: function (onLoad, onError) {
       var xhr = new XMLHttpRequest();
@@ -11,6 +12,7 @@
       xhr.addEventListener('load', function () {
         if (xhr.status === 200) {
           onLoad(xhr.response);
+          window.util.unblockForm(mapFilters, 'disabled');
         } else {
           onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
         }

@@ -100,6 +100,13 @@
           openPopup();
         });
       }
+    },
+    deleteCard: function () {
+      var popupCard = document.querySelector('.popup');
+      if (popupCard) {
+        popupCard.classList.add('hidden');
+      }
+      return;
     }
   };
 })();

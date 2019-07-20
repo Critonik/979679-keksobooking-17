@@ -1,10 +1,9 @@
 'use strict';
 (function () {
   var pinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-  var pins = [];
   var map = document.querySelector('.map');
   var mapPinsElement = map.querySelector('.map__pins');
-  var housingType = map.querySelector('#housing-type');
+
 
   var createPinsWithInfo = function (info) {
     var pinElement = pinsTemplate.cloneNode(true);
@@ -18,38 +17,20 @@
     return pinElement;
   };
 
-  var createPins = function (elem) {
-    var takeNumber = elem.length > 5 ? 5 : elem.length;
-    var fragment = document.createDocumentFragment();
-
-    for (var i = 0; i < takeNumber; i++) {
-      fragment.appendChild(createPinsWithInfo(elem[i]));
-    }
-    mapPinsElement.appendChild(fragment);
-  };
-
   window.render = {
+    pins: [],
     deletePins: function () {
       var deletedPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
       for (var j = 0; j < deletedPins.length; j++) {
         deletedPins[j].parentNode.removeChild(deletedPins[j]);
       }
     },
-    updatePins: function (type) {
-      var popupCard = document.querySelector('.popup');
-      if (popupCard) {
-        popupCard.classList.add('hidden');
-      }
-      var pinsCopy = pins.slice();
-      createPins(pinsCopy);
-      var filteredPins;
-      if (type !== 'any') {
-        filteredPins = pinsCopy.filter(function (it) {
-          return it.offer.type === type;
-        });
-        window.render.deletePins();
-        createPins(filteredPins);
-      }
+    updatePins: function () {
+      window.card.addListenersOnPin(pinsCopy);
+      var pinsCopy = window.render.pins.slice();
+      window.card.deleteCard();
+      window.render.deletePins();
+      window.filter.filtering(pinsCopy);
       window.card.addListenersOnPin(pinsCopy);
     },
     onError: function (errorMessage) {
@@ -64,21 +45,20 @@
     },
     createPinOnMap: function () {
       var successHandler = function (data) {
-        var typeOfHouse = document.getElementById('housing-type').value;
-        pins = data;
-        window.util.debounce(function () {
-          window.render.updatePins(typeOfHouse);
-        });
+        window.render.pins = data;
+        window.render.createPins(window.render.pins);
+        window.card.addListenersOnPin(window.render.pins);
       };
       window.backend.load(successHandler, window.render.onError);
+    },
+    createPins: function (elem) {
+      var takeNumber = elem.length > 5 ? 5 : elem.length;
+      var fragment = document.createDocumentFragment();
+
+      for (var i = 0; i < takeNumber; i++) {
+        fragment.appendChild(createPinsWithInfo(elem[i]));
+      }
+      mapPinsElement.appendChild(fragment);
     }
   };
-
-  housingType.addEventListener('change', function (evt) {
-    evt.preventDefault();
-    var typeOfHouse = document.getElementById('housing-type').value;
-    window.util.debounce(function () {
-      window.render.updatePins(typeOfHouse);
-    });
-  });
 })();

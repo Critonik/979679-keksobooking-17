@@ -107,6 +107,7 @@
     window.render.deletePins();
     window.map.setAdress(mainPin);
     setDefaultPosition();
+    window.map.offersLoaded = false;
   };
 
   var onSuccess = function () {
