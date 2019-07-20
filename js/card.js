@@ -5,6 +5,8 @@
   var cardBlock = document.querySelector('#card').content.querySelector('.map__card');
   var filtersContainer = map.querySelector('.map__filters-container');
   var cardModule = cardBlock.cloneNode(true);
+  var cardImgHeigth = 45;
+  var cardImgWidth = 40;
   var TypeToType = {
     bungalo: 'Бунгало',
     flat: 'Квартира',
@@ -34,15 +36,6 @@
     elem.insertAdjacentElement('afterbegin', li);
   };
 
-  var createImgElement = function (elem, imgSrc) {
-    var img = document.createElement('img');
-    img.classList.add('popup__photo');
-    img.width = '45';
-    img.height = '40';
-    img.alt = 'Фотография жилья';
-    img.src = imgSrc;
-    elem.insertAdjacentElement('afterbegin', img);
-  };
 
   var createCardElement = function (info) {
     cardModule.querySelector('.popup__title').innerText = info.offer.title;
@@ -61,7 +54,7 @@
     }
     cardPhotos.innerHTML = '';
     for (var j = 0; j < info.offer.photos.length; j++) {
-      createImgElement(cardPhotos, info.offer.photos[j]);
+      window.card.createImgElement(cardPhotos, info.offer.photos[j], cardImgHeigth, cardImgWidth);
     }
     cardModule.classList.add('hidden');
     return cardModule;
@@ -107,6 +100,15 @@
         popupCard.classList.add('hidden');
       }
       return;
+    },
+    createImgElement: function (elem, imgSrc, imgHeight, imgWidth) {
+      var img = document.createElement('img');
+      img.classList.add('popup__photo');
+      img.width = imgHeight;
+      img.height = imgWidth;
+      img.alt = 'Фотография жилья';
+      img.src = imgSrc;
+      elem.insertAdjacentElement('afterbegin', img);
     }
   };
 })();
