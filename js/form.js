@@ -110,11 +110,12 @@
     evt.preventDefault();
     var file = fileChooserForPhoto.files;
 
-    var fileName = file.forEach(function () {
-      return file.name.toLowerCase();
+    var fileName = file.forEach(function (it) {
+      return it.name.toLowerCase();
     });
 
-    var matches = FILE_TYPES.some(function (it) {
+
+    var matches = FILE_TYPES.forEach(function (it) {
       return fileName.endsWith(it);
     });
 
