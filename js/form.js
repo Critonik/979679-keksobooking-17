@@ -66,9 +66,13 @@
   };
 
   var createFormPhoto = function (r) {
+    var takeNumber = r.length > 5 ? 5 : r.length;
     var fragment = document.createDocumentFragment();
 
-    fragment.appendChild(createImgContainer(r));
+    for (var i = 0; i < takeNumber; i++) {
+      fragment.appendChild(createImgContainer(r[i]));
+    }
+
 
     formPhotoContainer.appendChild(fragment);
   };
@@ -104,8 +108,11 @@
 
   fileChooserForPhoto.addEventListener('change', function (evt) {
     evt.preventDefault();
-    var file = fileChooserForPhoto.files[0];
-    var fileName = file.name.toLowerCase();
+    var file = fileChooserForPhoto.files;
+
+    var fileName = file.forEach(function () {
+      return file.name.toLowerCase();
+    });
 
     var matches = FILE_TYPES.some(function (it) {
       return fileName.endsWith(it);
