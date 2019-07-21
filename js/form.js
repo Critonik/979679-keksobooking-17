@@ -15,6 +15,7 @@
   var map = document.querySelector('.map');
   var resetButton = adForm.querySelector('.ad-form__reset');
   var fileChooserForAvatar = adForm.querySelector('.ad-form__field input[type=file]');
+  var formPhotoContainer = adForm.querySelector('.ad-form__photo-container');
   var previewAvatar = adForm.querySelector('.ad-form-header__userpic');
   var fileChooserForPhoto = adForm.querySelector('.ad-form__upload input[type=file]');
   var previewPhoto = adForm.querySelector('.ad-form__photo');
@@ -49,6 +50,12 @@
     return dropZoneForPhoto.addEventListener(eventName, preventDefaults, false);
   });
 
+  var createImgContainer = function (result) {
+    var imgContainer = previewPhoto.cloneNode(true);
+    window.card.createImgElement(imgContainer, result, imgHeigthWidth, imgHeigthWidth);
+    return imgContainer;
+  };
+
   var previewFile = function (file) {
     var reader = new FileReader();
     reader.readAsDataURL(file);
@@ -56,6 +63,14 @@
       previewAvatar.src = reader.result;
     });
     reader.readAsDataURL(file);
+  };
+
+  var createFormPhoto = function (r) {
+    var fragment = document.createDocumentFragment();
+
+    fragment.appendChild(createImgContainer(r));
+
+    formPhotoContainer.appendChild(fragment);
   };
 
   dropZoneForAvatar.addEventListener('drop', handleDrop, false);
@@ -100,11 +115,7 @@
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
-        // previewAvatar.src = reader.result;
-      /*  for (var i = 0; i < 1; i++) {
-
-        }*/
-        window.card.createImgElement(previewPhoto, reader.result, imgHeigthWidth, imgHeigthWidth);
+        createFormPhoto(reader.result);
       });
 
       reader.readAsDataURL(file);
