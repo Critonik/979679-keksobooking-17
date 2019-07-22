@@ -98,7 +98,7 @@
     }
   });
 
-  var renderPhotos = function (file)
+  var renderPhotos = function (file) {
     var reader = new FileReader();
     reader.addEventListener('load', function () {
       createFormPhoto(reader.result);
