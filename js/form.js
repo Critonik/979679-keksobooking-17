@@ -98,35 +98,20 @@
     }
   });
 
+  var renderPhotos = function (file)
+    var reader = new FileReader();
+    reader.addEventListener('load', function () {
+      createFormPhoto(reader.result);
+    });
+
+    reader.readAsDataURL(file);
+  };
+
   fileChooserForPhoto.addEventListener('change', function (evt) {
     evt.preventDefault();
     var file = fileChooserForPhoto.files;
-    var fileArray = Array.from(file);
-
-    var fileNameArray = [];
-
-    for (var j = 0; j < fileArray.length; j++) {
-      fileNameArray.push(fileArray[j].name.toLowerCase());
-    }
-
-    var matches = FILE_TYPES.some(function (it) {
-      for (var k = 0; k < fileNameArray.length; k++) {
-        return fileNameArray[k].endsWith(it);
-      }
-      return matches;
-    });
-
-    if (matches) {
-      var reader = new FileReader();
-      for (var l = 0; l < file.length; l++) {
-        reader.readAsDataURL(file[l]);
-      }
-
-
-      reader.addEventListener('load', function () {
-        createFormPhoto(reader.result);
-      });
-
+    for (var l = 0; l < file.length; l++) {
+      renderPhotos(file[l]);
     }
   });
 
