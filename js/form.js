@@ -117,7 +117,6 @@
     });
 
     if (matches) {
-      debugger;
       var reader = new FileReader();
       for (var l = 0; l < file.length; l++) {
         reader.readAsDataURL(file[l]);
