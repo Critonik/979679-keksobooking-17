@@ -117,14 +117,16 @@
     });
 
     if (matches) {
+      debugger;
       var reader = new FileReader();
       for (var l = 0; l < file.length; l++) {
-        reader.addEventListener('load', function () {
-          createFormPhoto(reader.result);
-        });
-
         reader.readAsDataURL(file[l]);
       }
+
+
+      reader.addEventListener('load', function () {
+        createFormPhoto(reader.result);
+      });
 
     }
   });
