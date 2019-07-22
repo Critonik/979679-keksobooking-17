@@ -15,13 +15,12 @@
   var map = document.querySelector('.map');
   var resetButton = adForm.querySelector('.ad-form__reset');
   var fileChooserForAvatar = adForm.querySelector('.ad-form__field input[type=file]');
-  var formPhotoContainer = adForm.querySelector('.ad-form__photo-container');
+  var formPhotoContainer = document.querySelector('#adform_photo').content.querySelector('.ad-form__photo-container');
   var previewAvatar = adForm.querySelector('.ad-form-header__userpic');
   var fileChooserForPhoto = adForm.querySelector('.ad-form__upload input[type=file]');
   var previewPhoto = adForm.querySelector('.ad-form__photo');
   var dropZoneForAvatar = adForm.querySelector('.ad-form-header__drop-zone');
-  var dropZoneForPhoto = adForm.querySelector('.ad-form__drop-zone');
-  var evtArray = ['dragenter', 'dragover', 'dragleave', 'drop'];
+  // var dropZoneForPhoto = adForm.querySelector('.ad-form__drop-zone');
 
   var OfferToValue = {
     bungalo: 0,
@@ -37,17 +36,16 @@
     100: ['0']
   };
 
-  var preventDefaults = function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  evtArray.forEach(function (eventName) {
-    return dropZoneForAvatar.addEventListener(eventName, preventDefaults, false);
+  dropZoneForAvatar.addEventListener('dragenter', function (evt) {
+    evt.preventDefault();
   });
 
-  evtArray.forEach(function (eventName) {
-    return dropZoneForPhoto.addEventListener(eventName, preventDefaults, false);
+  dropZoneForAvatar.addEventListener('dragover', function (evt) {
+    evt.preventDefault();
+  });
+
+  dropZoneForAvatar.addEventListener('dragleave', function (evt) {
+    evt.preventDefault();
   });
 
   var createImgContainer = function (result) {
@@ -66,10 +64,9 @@
   };
 
   var createFormPhoto = function (r) {
-    var takeNumber = r.length > 5 ? 5 : r.length;
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < takeNumber; i++) {
+    for (var i = 0; i < r.length; i++) {
       fragment.appendChild(createImgContainer(r[i]));
     }
 
@@ -77,14 +74,13 @@
     formPhotoContainer.appendChild(fragment);
   };
 
-  dropZoneForAvatar.addEventListener('drop', handleDrop, false);
-
-
-  var handleDrop = function (e) {
-    var data = e.dataTransfer;
+  dropZoneForAvatar.addEventListener('drop', function (evt) {
+    evt.preventDefault();
+    var data = evt.dataTransfer;
     var files = data.files;
     previewFile(files[0]);
-  };
+  });
+
 
   fileChooserForAvatar.addEventListener('change', function (evt) {
     evt.preventDefault();
@@ -109,14 +105,19 @@
   fileChooserForPhoto.addEventListener('change', function (evt) {
     evt.preventDefault();
     var file = fileChooserForPhoto.files;
+    var fileArray = Array.from(file);
 
-    var fileName = file.forEach(function (it) {
-      return it.name.toLowerCase();
-    });
+    var fileNameArray = [];
 
+    for (var j = 0; j < fileArray.length; j++) {
+      fileNameArray.push(fileArray[j].name.toLowerCase());
+    }
 
-    var matches = FILE_TYPES.forEach(function (it) {
-      return fileName.endsWith(it);
+    var matches = FILE_TYPES.some(function (it) {
+      for (var k = 0; k < fileNameArray.length; k++) {
+        return fileNameArray[k].endsWith(it);
+      }
+      return matches;
     });
 
     if (matches) {
