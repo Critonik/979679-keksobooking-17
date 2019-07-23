@@ -138,52 +138,41 @@
 
   var galleryMove = function (evt) {
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
+    var startPhotoCoords = {
+      x: evt.clientX
     };
 
-    var onMouseMove = function (moveEvt) {
+    var photoOnMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
       evt.style.position = 'absolute';
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
+      var shiftPhoto = {
+        x: startPhotoCoords.x - moveEvt.clientX
       };
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
+      startPhotoCoords = {
+        x: moveEvt.clientX
       };
 
-      evt.style.top = (evt.offsetTop - shift.y) + 'px';
-      evt.style.left = (evt.offsetLeft - shift.x) + 'px';
+      evt.style.left = (evt.offsetLeft - shiftPhoto.x) + 'px';
 
 
-      if (evt.offsetLeft > (formPhotoContainer.offsetWidth - evt.offsetWidth)) {
-        evt.style.left = (formPhotoContainer.offsetWidth - evt.offsetWidth) + 'px';
+      if (evt.offsetLeft > formPhotoContainer.offsetWidth) {
+        evt.style.left = formPhotoContainer.offsetWidth + 'px';
       }
-      if (evt.offsetLeft < 0) {
-        evt.style.left = 0 + 'px';
-      }
-
-      if (evt.offsetTop > (formPhotoContainer.offsetTop - mainPin.offsetHeight)) {
-        evt.style.top = (formPhotoContainer.offsetTop - mainPin.offsetHeight) + 'px';
-      }
-      if (evt.offsetTop < (formPhotoContainer.offsetTop - evt.offsetHeight)) {
-        evt.style.top = (formPhotoContainer.offsetTop - evt.offsetHeight) + 'px';
+      if (evt.offsetLeft < 156) {
+        evt.style.left = 156 + 'px';
       }
     };
 
-    var onMouseUp = function (upEvt) {
+    var photoOnMouseUp = function (upEvt) {
       upEvt.preventDefault();
-      formPhotoContainer.removeEventListener('mousemove', onMouseMove);
-      formPhotoContainer.removeEventListener('mouseup', onMouseUp);
+      formPhotoContainer.removeEventListener('mousemove', photoOnMouseMove);
+      formPhotoContainer.removeEventListener('mouseup', photoOnMouseUp);
     };
 
 
-    formPhotoContainer.addEventListener('mousemove', onMouseMove);
-    formPhotoContainer.addEventListener('mouseup', onMouseUp);
+    formPhotoContainer.addEventListener('mousemove', photoOnMouseMove);
+    formPhotoContainer.addEventListener('mouseup', photoOnMouseUp);
   };
 
   var addListenersOnGallery = function () {
