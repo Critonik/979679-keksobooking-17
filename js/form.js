@@ -20,8 +20,7 @@
   var fileChooserForPhoto = adForm.querySelector('.ad-form__upload input[type=file]');
   var previewPhoto = document.querySelector('#adform_photo').content.querySelector('.ad-form__photo');
   var dropZoneForAvatar = adForm.querySelector('.ad-form-header__drop-zone');
-  // var dropZoneForPhoto = adForm.querySelector('.ad-form__drop-zone');
-
+  var dropZoneForPhoto = adForm.querySelector('.ad-form__drop-zone');
   var OfferToValue = {
     bungalo: 0,
     flat: 1000,
@@ -48,6 +47,18 @@
     evt.preventDefault();
   });
 
+  dropZoneForPhoto.addEventListener('dragenter', function (evt) {
+    evt.preventDefault();
+  });
+
+  dropZoneForPhoto.addEventListener('dragover', function (evt) {
+    evt.preventDefault();
+  });
+
+  dropZoneForPhoto.addEventListener('dragleave', function (evt) {
+    evt.preventDefault();
+  });
+
   var createImgContainer = function (result) {
     var imgContainer = previewPhoto.cloneNode(true);
     window.card.createImgElement(imgContainer, result, imgHeigthWidth, imgHeigthWidth);
@@ -68,6 +79,7 @@
     fragment.appendChild(createImgContainer(r));
 
     formPhotoContainer.appendChild(fragment);
+    addListenersOnGallery();
   };
 
   dropZoneForAvatar.addEventListener('drop', function (evt) {
@@ -75,6 +87,15 @@
     var data = evt.dataTransfer;
     var files = data.files;
     previewFile(files[0]);
+  });
+
+  dropZoneForPhoto.addEventListener('drop', function (evt) {
+    evt.preventDefault();
+    var data = evt.dataTransfer;
+    var files = data.files;
+    for (var l = 0; l < files.length; l++) {
+      renderPhotos(files[l]);
+    }
   });
 
 
@@ -114,6 +135,66 @@
       renderPhotos(file[l]);
     }
   });
+
+  var galleryMove = function (evt) {
+
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+      evt.style.position = 'absolute';
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      evt.style.top = (evt.offsetTop - shift.y) + 'px';
+      evt.style.left = (evt.offsetLeft - shift.x) + 'px';
+
+
+      if (evt.offsetLeft > (formPhotoContainer.offsetWidth - evt.offsetWidth)) {
+        evt.style.left = (formPhotoContainer.offsetWidth - evt.offsetWidth) + 'px';
+      }
+      if (evt.offsetLeft < 0) {
+        evt.style.left = 0 + 'px';
+      }
+
+      if (evt.offsetTop > (formPhotoContainer.offsetTop - mainPin.offsetHeight)) {
+        evt.style.top = (formPhotoContainer.offsetTop - mainPin.offsetHeight) + 'px';
+      }
+      if (evt.offsetTop < (formPhotoContainer.offsetTop - evt.offsetHeight)) {
+        evt.style.top = (formPhotoContainer.offsetTop - evt.offsetHeight) + 'px';
+      }
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+      formPhotoContainer.removeEventListener('mousemove', onMouseMove);
+      formPhotoContainer.removeEventListener('mouseup', onMouseUp);
+    };
+
+
+    formPhotoContainer.addEventListener('mousemove', onMouseMove);
+    formPhotoContainer.addEventListener('mouseup', onMouseUp);
+  };
+
+  var addListenersOnGallery = function () {
+    var galleryPhotos = formPhotoContainer.querySelectorAll('.ad-form__photo');
+    for (var n = 0; n < galleryPhotos.length; n++) {
+      galleryPhotos[n].addEventListener('mousedown', function (evt) {
+        evt.preventDefault();
+        galleryMove(event.currentTarget);
+      });
+    }
+  };
 
   placeType.addEventListener('change', function (evt) {
     evt.preventDefault();
