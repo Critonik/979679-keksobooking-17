@@ -76,31 +76,23 @@
 
   housingType.addEventListener('change', function (evt) {
     evt.preventDefault();
-    window.util.debounce(function () {
-      window.render.updatePins();
-    });
+    window.render.updatePins();
   });
 
 
   housingPrice.addEventListener('change', function (evt) {
     evt.preventDefault();
-    window.util.debounce(function () {
-      window.render.updatePins();
-    });
+    window.render.updatePins();
   });
 
   housingRooms.addEventListener('change', function (evt) {
     evt.preventDefault();
-    window.util.debounce(function () {
-      window.render.updatePins();
-    });
+    window.render.updatePins();
   });
 
   housingGuests.addEventListener('change', function (evt) {
     evt.preventDefault();
-    window.util.debounce(function () {
-      window.render.updatePins();
-    });
+    window.render.updatePins();
   });
 
   var addListenerOnCheckbox = function () {
@@ -108,9 +100,7 @@
     for (var i = 0; i < housingFeaturesArray.length; i++) {
       housingFeaturesArray[i].addEventListener('change', function (evt) {
         evt.preventDefault();
-        window.util.debounce(function () {
-          window.render.updatePins();
-        });
+        window.render.updatePins();
       });
     }
   };

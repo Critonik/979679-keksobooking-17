@@ -79,7 +79,6 @@
     fragment.appendChild(createImgContainer(r));
 
     formPhotoContainer.appendChild(fragment);
-    addListenersOnGallery();
   };
 
   dropZoneForAvatar.addEventListener('drop', function (evt) {
@@ -159,8 +158,8 @@
       if (evt.offsetLeft > formPhotoContainer.offsetWidth) {
         evt.style.left = formPhotoContainer.offsetWidth + 'px';
       }
-      if (evt.offsetLeft < 156) {
-        evt.style.left = 156 + 'px';
+      if (evt.offsetLeft < 0) {
+        evt.style.left = 0 + 'px';
       }
     };
 
@@ -175,15 +174,23 @@
     formPhotoContainer.addEventListener('mouseup', photoOnMouseUp);
   };
 
-  var addListenersOnGallery = function () {
-    var galleryPhotos = formPhotoContainer.querySelectorAll('.ad-form__photo');
-    for (var n = 0; n < galleryPhotos.length; n++) {
-      galleryPhotos[n].addEventListener('mousedown', function (evt) {
-        evt.preventDefault();
-        galleryMove(event.currentTarget);
-      });
-    }
-  };
+  /* var insertGalleryPhoto = function (currentPhoto, currentPlace) {
+    currentPlace.style.position = 'relative';
+    formPhotoContainer.insertBefore(currentPhoto, currentPlace);
+  };*/
+
+  formPhotoContainer.addEventListener('dragstart', function (evt) {
+    evt.preventDefault();
+    galleryMove(evt.target);
+  });
+
+  formPhotoContainer.addEventListener('dragover', function (evt) {
+    evt.preventDefault();
+  });
+
+  /* formPhotoContainer.addEventListener('drop', function (evt) {
+    // insertGalleryPhoto(, evt.target);  // не смог понять что передать в качестве первого аргумента
+  });*/
 
   placeType.addEventListener('change', function (evt) {
     evt.preventDefault();
