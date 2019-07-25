@@ -21,6 +21,7 @@
   var previewPhoto = document.querySelector('#adform_photo').content.querySelector('.ad-form__photo');
   var dropZoneForAvatar = adForm.querySelector('.ad-form-header__drop-zone');
   var dropZoneForPhoto = adForm.querySelector('.ad-form__drop-zone');
+  var movedPiece = null;
   var OfferToValue = {
     bungalo: 0,
     flat: 1000,
@@ -135,62 +136,23 @@
     }
   });
 
-  var galleryMove = function (evt) {
 
-    var startPhotoCoords = {
-      x: evt.clientX
-    };
-
-    var photoOnMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
-      evt.style.position = 'absolute';
-      var shiftPhoto = {
-        x: startPhotoCoords.x - moveEvt.clientX
-      };
-
-      startPhotoCoords = {
-        x: moveEvt.clientX
-      };
-
-      evt.style.left = (evt.offsetLeft - shiftPhoto.x) + 'px';
-
-
-      if (evt.offsetLeft > formPhotoContainer.offsetWidth) {
-        evt.style.left = formPhotoContainer.offsetWidth + 'px';
-      }
-      if (evt.offsetLeft < 0) {
-        evt.style.left = 0 + 'px';
-      }
-    };
-
-    var photoOnMouseUp = function (upEvt) {
-      upEvt.preventDefault();
-      formPhotoContainer.removeEventListener('mousemove', photoOnMouseMove);
-      formPhotoContainer.removeEventListener('mouseup', photoOnMouseUp);
-    };
-
-
-    formPhotoContainer.addEventListener('mousemove', photoOnMouseMove);
-    formPhotoContainer.addEventListener('mouseup', photoOnMouseUp);
-  };
-
-  /* var insertGalleryPhoto = function (currentPhoto, currentPlace) {
-    currentPlace.style.position = 'relative';
-    formPhotoContainer.insertBefore(currentPhoto, currentPlace);
-  };*/
-
-  formPhotoContainer.addEventListener('dragstart', function (evt) {
-    evt.preventDefault();
-    galleryMove(evt.target);
+  formPhotoContainer.addEventListener('dragstart', function () {
+    if (event.target.classList.contains('ad-form__photo')) {
+      movedPiece = event.target;
+      event.dataTransfer.setData('text', '');
+    }
   });
 
   formPhotoContainer.addEventListener('dragover', function (evt) {
     evt.preventDefault();
   });
 
-  /* formPhotoContainer.addEventListener('drop', function (evt) {
-    // insertGalleryPhoto(, evt.target);  // не смог понять что передать в качестве первого аргумента
-  });*/
+  formPhotoContainer.addEventListener('drop', function () {
+    if (event.target.classList.contains('ad-form__photo')) {
+      formPhotoContainer.insertBefore(movedPiece, event.target);
+    }
+  });
 
   placeType.addEventListener('change', function (evt) {
     evt.preventDefault();
