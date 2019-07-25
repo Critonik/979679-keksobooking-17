@@ -30,9 +30,7 @@
       var pinsCopy = window.render.pins.slice();
       window.card.deleteCard();
       window.render.deletePins();
-      window.util.debounce(function () {
-        window.filter.filtering(pinsCopy);
-      });
+      window.filter.filtering(pinsCopy);
       window.card.addListenersOnPin(pinsCopy);
     },
     onError: function (errorMessage) {

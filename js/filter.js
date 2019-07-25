@@ -70,7 +70,10 @@
       .filter(function (it) {
         return checkConditioner.checked ? it.offer.features.indexOf(checkConditioner.value) >= 0 : pinsCopy;
       });
-      window.render.createPins(filteredPins);
+
+      window.util.debounce(function () {
+        window.render.createPins(filteredPins);
+      });
     }
   };
 
