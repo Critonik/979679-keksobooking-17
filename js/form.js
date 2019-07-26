@@ -138,8 +138,8 @@
 
 
   formPhotoContainer.addEventListener('dragstart', function () {
-    if (event.target.classList.contains('ad-form__photo')) {
-      movedPiece = event.target;
+    if (event.target.parentNode.classList.contains('ad-form__photo')) {
+      movedPiece = event.target.parentNode;
       event.dataTransfer.setData('text', '');
     }
   });
@@ -149,8 +149,10 @@
   });
 
   formPhotoContainer.addEventListener('drop', function () {
-    if (event.target.classList.contains('ad-form__photo')) {
-      formPhotoContainer.insertBefore(movedPiece, event.target);
+    if (event.target.parentNode.classList.contains('ad-form__photo')) {
+      formPhotoContainer.insertBefore(movedPiece, event.target.parentNode);
+    } else {
+      formPhotoContainer.insertBefore(movedPiece, null);
     }
   });
 
