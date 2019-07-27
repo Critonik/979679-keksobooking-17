@@ -27,6 +27,16 @@
 
   window.map.setAdress(mainPin);
 
+  var unblockOnKeydown = function () {
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+    window.util.unblockForm(adForm, 'disabled');
+  };
+
+  mainPin.addEventListener('keydown', function (evt) {
+    window.util.isEnterEvent(evt, unblockOnKeydown);
+  });
+
 
   var observeMovePin = function (evt) {
     evt.preventDefault();
