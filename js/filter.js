@@ -26,6 +26,38 @@
     high: null
   };
 
+  housingType.addEventListener('change', function (evt) {
+    evt.preventDefault();
+    window.render.updatePins();
+  });
+
+
+  housingPrice.addEventListener('change', function (evt) {
+    evt.preventDefault();
+    window.render.updatePins();
+  });
+
+  housingRooms.addEventListener('change', function (evt) {
+    evt.preventDefault();
+    window.render.updatePins();
+  });
+
+  housingGuests.addEventListener('change', function (evt) {
+    evt.preventDefault();
+    window.render.updatePins();
+  });
+
+  var addListenerOnCheckbox = function () {
+    var housingFeaturesArray = housingFeatures.querySelectorAll('input[name="features"]');
+    for (var i = 0; i < housingFeaturesArray.length; i++) {
+      housingFeaturesArray[i].addEventListener('change', function (evt) {
+        evt.preventDefault();
+        window.render.updatePins();
+      });
+    }
+  };
+  addListenerOnCheckbox();
+
   window.filter = {
     filtering: function (pinsCopy) {
       var filteredPins = pinsCopy.filter(function (it) {
@@ -76,36 +108,4 @@
       });
     }
   };
-
-  housingType.addEventListener('change', function (evt) {
-    evt.preventDefault();
-    window.render.updatePins();
-  });
-
-
-  housingPrice.addEventListener('change', function (evt) {
-    evt.preventDefault();
-    window.render.updatePins();
-  });
-
-  housingRooms.addEventListener('change', function (evt) {
-    evt.preventDefault();
-    window.render.updatePins();
-  });
-
-  housingGuests.addEventListener('change', function (evt) {
-    evt.preventDefault();
-    window.render.updatePins();
-  });
-
-  var addListenerOnCheckbox = function () {
-    var housingFeaturesArray = housingFeatures.querySelectorAll('input[name="features"]');
-    for (var i = 0; i < housingFeaturesArray.length; i++) {
-      housingFeaturesArray[i].addEventListener('change', function (evt) {
-        evt.preventDefault();
-        window.render.updatePins();
-      });
-    }
-  };
-  addListenerOnCheckbox();
 })();

@@ -22,14 +22,14 @@
   var dropZoneForAvatar = adForm.querySelector('.ad-form-header__drop-zone');
   var dropZoneForPhoto = adForm.querySelector('.ad-form__drop-zone');
   var movedPiece = null;
-  var OfferToValue = {
+  var OffersToValues = {
     bungalo: 0,
     flat: 1000,
     house: 5000,
     palace: 10000
   };
 
-  var GuestsByRoom = {
+  var GuestsByRooms = {
     1: ['1'],
     2: ['1', '2'],
     3: ['1', '2', '3'],
@@ -137,10 +137,13 @@
   });
 
 
-  formPhotoContainer.addEventListener('dragstart', function () {
-    if (event.target.parentNode.classList.contains('ad-form__photo')) {
-      movedPiece = event.target.parentNode;
-      event.dataTransfer.setData('text', '');
+  formPhotoContainer.addEventListener('dragstart', function (evt) {
+    if (evt.target.parentNode.classList.contains('ad-form__photo')) {
+      movedPiece = evt.target.parentNode;
+      evt.dataTransfer.setData('text', '');
+    } else if (evt.target.classList.contains('ad-form__photo')) {
+      movedPiece = evt.target;
+      evt.dataTransfer.setData('text', '');
     }
   });
 
@@ -148,9 +151,9 @@
     evt.preventDefault();
   });
 
-  formPhotoContainer.addEventListener('drop', function () {
-    if (event.target.parentNode.classList.contains('ad-form__photo')) {
-      formPhotoContainer.insertBefore(movedPiece, event.target.parentNode);
+  formPhotoContainer.addEventListener('drop', function (evt) {
+    if (evt.target.parentNode.classList.contains('ad-form__photo')) {
+      formPhotoContainer.insertBefore(movedPiece, evt.target.parentNode);
     } else {
       formPhotoContainer.insertBefore(movedPiece, null);
     }
@@ -158,41 +161,41 @@
 
   placeType.addEventListener('change', function (evt) {
     evt.preventDefault();
-    window.util.changePrice(evt.target.value, priceInput, OfferToValue);
+    window.util.changePrice(evt.target.value, priceInput, OffersToValues);
   });
 
   priceInput.addEventListener('input', function (evt) {
     evt.preventDefault();
     var placeTypeValue = placeType.value;
-    var minPrice = OfferToValue[placeTypeValue];
-    if (event.target.value < minPrice) {
-      event.target.setCustomValidity('Цена должны быть не меньше ' + minPrice + ' рублей');
+    var minPrice = OffersToValues[placeTypeValue];
+    if (evt.target.value < minPrice) {
+      evt.target.setCustomValidity('Цена должны быть не меньше ' + minPrice + ' рублей');
     } else {
-      event.target.setCustomValidity('');
+      evt.target.setCustomValidity('');
     }
   });
 
   var onFieldRoomsChange = function (value) {
     optionsGuests.forEach(function (option) {
-      option.disabled = GuestsByRoom[value].indexOf(option.value) === -1;
+      option.disabled = GuestsByRooms[value].indexOf(option.value) === -1;
     });
   };
 
   var onFieldGuestsValidity = function (value) {
-    if (GuestsByRoom[value].indexOf(guestNumber.value) === -1) {
+    if (GuestsByRooms[value].indexOf(guestNumber.value) === -1) {
       guestNumber.setCustomValidity('Укажите другое количество гостей');
     }
   };
 
-  guestNumber.addEventListener('change', function () {
-    if (GuestsByRoom[roomNumber.value].indexOf(event.target.value) !== -1) {
+  guestNumber.addEventListener('change', function (evt) {
+    if (GuestsByRooms[roomNumber.value].indexOf(evt.target.value) !== -1) {
       guestNumber.setCustomValidity('');
     }
   });
 
-  roomNumber.addEventListener('change', function () {
-    onFieldRoomsChange(event.target.value);
-    onFieldGuestsValidity(event.target.value);
+  roomNumber.addEventListener('change', function (evt) {
+    onFieldRoomsChange(evt.target.value);
+    onFieldGuestsValidity(evt.target.value);
   });
 
   window.util.syncPlace(arrivalTime, departureTime);
@@ -228,6 +231,7 @@
     if (popupCard) {
       popupCard.classList.add('hidden');
     }
+    previewAvatar.src = 'img/muffin-grey.svg';
     window.util.blockForm(adForm);
     window.util.blockForm(mapFilters);
     map.classList.add('map--faded');
@@ -236,6 +240,12 @@
     window.render.deletePins();
     window.map.setAdress(mainPin);
     setDefaultPosition();
+    var formPhotoContainerContent = formPhotoContainer.querySelectorAll('.ad-form__photo');
+    if (formPhotoContainerContent) {
+      for (var n = 0; n < formPhotoContainerContent.length; n++) {
+        formPhotoContainerContent[n].remove();
+      }
+    }
     window.map.offersLoaded = false;
   };
 
