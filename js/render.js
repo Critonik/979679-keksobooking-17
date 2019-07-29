@@ -21,17 +21,15 @@
     pins: [],
     deletePins: function () {
       var deletedPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
-      for (var j = 0; j < deletedPins.length; j++) {
-        deletedPins[j].parentNode.removeChild(deletedPins[j]);
-      }
+      deletedPins.forEach(function (elementToDel) {
+        elementToDel.remove();
+      });
     },
     updatePins: function () {
-      window.card.addListenersOnPin(pinsCopy);
       var pinsCopy = window.render.pins.slice();
       window.card.deleteCard();
       window.render.deletePins();
       window.filter.filtering(pinsCopy);
-      window.card.addListenersOnPin(pinsCopy);
     },
     onError: function (errorMessage) {
       var errorBlock = document.querySelector('#error').content.querySelector('.error');

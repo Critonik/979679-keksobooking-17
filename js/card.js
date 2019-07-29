@@ -87,12 +87,12 @@
   window.card = {
     addListenersOnPin: function (pinsArr) {
       var selectedPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
-      for (var l = 0; l < selectedPins.length; l++) {
-        selectedPins[l].addEventListener('click', function (evt) {
+      selectedPins.forEach(function (selectedPin) {
+        selectedPin.addEventListener('click', function (evt) {
           renderCard(detectionCard(pinsArr, evt.currentTarget));
           openPopup();
         });
-      }
+      });
     },
     deleteCard: function () {
       var popupCard = document.querySelector('.popup');
