@@ -98,7 +98,7 @@
 
   fileChooserForAvatar.addEventListener('change', function (evt) {
     evt.preventDefault();
-    var file = evt.target.files[0];
+    var file = evt.target.files;
 
     var matches = Array.from(file).filter(function (it) {
       return isValidImage(it.type);
@@ -108,7 +108,7 @@
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
-        renderPhotos(file, uploadAvatar);
+        renderPhotos(file[0], uploadAvatar);
       });
 
       reader.readAsDataURL(file);
