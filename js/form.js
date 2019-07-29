@@ -105,13 +105,7 @@
     });
 
     if (matches) {
-      var reader = new FileReader();
-
-      reader.addEventListener('load', function () {
-        renderPhotos(file[0], uploadAvatar);
-      });
-
-      reader.readAsDataURL(file);
+      renderPhotos(file[0], uploadAvatar);
     }
   });
 
