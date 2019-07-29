@@ -9,27 +9,6 @@
     getRandomInt: function (min, max) {
       return Math.floor(Math.random() * (max - min)) + min;
     },
-    syncTime: function (elemFrom, value, elemTo) {
-      for (var i = 0; i < elemFrom.length; i++) {
-        if (value === elemTo[i].value) {
-          elemTo.options[i].selected = true;
-        }
-      }
-    },
-    syncPlace: function (selectFrom, selectTo) {
-      selectFrom.addEventListener('change', function (evt) {
-        evt.preventDefault();
-        window.util.syncTime(evt.target, evt.target.value, selectTo);
-      });
-    },
-    changePrice: function (select, input, offers) {
-      for (var key in offers) {
-        if (select === key) {
-          input.placeholder = offers[key];
-          input.min = offers[key];
-        }
-      }
-    },
     unblockForm: function (className, attribute) {
       for (var j = 0; j < className.children.length; j++) {
         className.children[j].removeAttribute(attribute);

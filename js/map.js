@@ -11,11 +11,11 @@
   window.util.blockForm(mapFilters);
 
   var getPinPositionTop = function (elem) {
-    return elem.offsetTop + elem.offsetHeight;
+    return Math.round(elem.offsetTop + elem.offsetHeight);
   };
 
   var getPinPositionLeft = function (elem) {
-    return elem.offsetLeft + (elem.offsetWidth / 2);
+    return Math.round(elem.offsetLeft + (elem.offsetWidth / 2));
   };
 
   window.map = {

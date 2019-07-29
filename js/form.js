@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var FILE_TYPES = ['image/gif', 'image/jpeg', 'image/png', 'image/jpg'];
   var imgHeigthWidth = 70;
   var adForm = document.querySelector('.ad-form');
   var placeType = adForm.querySelector('#type');
@@ -40,12 +40,19 @@
     evt.preventDefault();
   });
 
+  dropZoneForAvatar.addEventListener('dragleave', function (evt) {
+    evt.preventDefault();
+  });
+
   dropZoneForAvatar.addEventListener('dragover', function (evt) {
     evt.preventDefault();
   });
 
-  dropZoneForAvatar.addEventListener('dragleave', function (evt) {
+  dropZoneForAvatar.addEventListener('drop', function (evt) {
     evt.preventDefault();
+    var data = evt.target.dataTransfer;
+    var files = data.files;
+    renderPhotos(files, uploadAvatar);
   });
 
   dropZoneForPhoto.addEventListener('dragenter', function (evt) {
@@ -60,69 +67,58 @@
     evt.preventDefault();
   });
 
+  dropZoneForPhoto.addEventListener('drop', function (evt) {
+    evt.preventDefault();
+    var data = evt.dataTransfer;
+    var files = data.files;
+    for (var l = 0; l < files.length; l++) {
+      renderPhotos(files[l], createFormPhoto);
+    }
+  });
+
+  var uploadAvatar = function (src) {
+    previewAvatar.src = src;
+  };
+
   var createImgContainer = function (result) {
     var imgContainer = previewPhoto.cloneNode(true);
     window.card.createImgElement(imgContainer, result, imgHeigthWidth, imgHeigthWidth);
     return imgContainer;
   };
 
-  var previewFile = function (file) {
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.addEventListener('load', function () {
-      previewAvatar.src = reader.result;
-    });
-    reader.readAsDataURL(file);
-  };
-
-  var createFormPhoto = function (r) {
+  var createFormPhoto = function (photo) {
     var fragment = document.createDocumentFragment();
-    fragment.appendChild(createImgContainer(r));
-
+    fragment.appendChild(createImgContainer(photo));
     formPhotoContainer.appendChild(fragment);
   };
 
-  dropZoneForAvatar.addEventListener('drop', function (evt) {
-    evt.preventDefault();
-    var data = evt.dataTransfer;
-    var files = data.files;
-    previewFile(files[0]);
-  });
-
-  dropZoneForPhoto.addEventListener('drop', function (evt) {
-    evt.preventDefault();
-    var data = evt.dataTransfer;
-    var files = data.files;
-    for (var l = 0; l < files.length; l++) {
-      renderPhotos(files[l]);
-    }
-  });
-
+  var isValidImage = function (type) {
+    return FILE_TYPES.indexOf(type) !== -1;
+  };
 
   fileChooserForAvatar.addEventListener('change', function (evt) {
     evt.preventDefault();
-    var file = fileChooserForAvatar.files[0];
-    var fileName = file.name.toLowerCase();
+    var file = evt.target.files[0];
 
-    var matches = FILE_TYPES.some(function (it) {
-      return fileName.endsWith(it);
+    var matches = Array.from(file).filter(function (it) {
+      return isValidImage(it.type);
     });
 
     if (matches) {
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
-        previewAvatar.src = reader.result;
+        renderPhotos(file, uploadAvatar);
       });
 
       reader.readAsDataURL(file);
     }
   });
 
-  var renderPhotos = function (file) {
+  var renderPhotos = function (file, cb) {
     var reader = new FileReader();
     reader.addEventListener('load', function () {
-      createFormPhoto(reader.result);
+      cb(reader.result);
     });
 
     reader.readAsDataURL(file);
@@ -131,11 +127,17 @@
   fileChooserForPhoto.addEventListener('change', function (evt) {
     evt.preventDefault();
     var file = fileChooserForPhoto.files;
-    for (var l = 0; l < file.length; l++) {
-      renderPhotos(file[l]);
+
+    var matches = Array.from(file).filter(function (it) {
+      return isValidImage(it.type);
+    });
+
+    if (matches) {
+      for (var l = 0; l < file.length; l++) {
+        renderPhotos(file[l], createFormPhoto);
+      }
     }
   });
-
 
   formPhotoContainer.addEventListener('dragstart', function (evt) {
     if (evt.target.parentNode.classList.contains('ad-form__photo')) {
@@ -147,10 +149,6 @@
     }
   });
 
-  formPhotoContainer.addEventListener('dragover', function (evt) {
-    evt.preventDefault();
-  });
-
   formPhotoContainer.addEventListener('drop', function (evt) {
     if (evt.target.parentNode.classList.contains('ad-form__photo')) {
       formPhotoContainer.insertBefore(movedPiece, evt.target.parentNode);
@@ -159,9 +157,34 @@
     }
   });
 
+
+  var syncTime = function (elemFrom, value, elemTo) {
+    for (var i = 0; i < elemFrom.length; i++) {
+      if (value === elemTo[i].value) {
+        elemTo.options[i].selected = true;
+      }
+    }
+  };
+
+  var syncPlace = function (selectFrom, selectTo) {
+    selectFrom.addEventListener('change', function (evt) {
+      evt.preventDefault();
+      syncTime(evt.target, evt.target.value, selectTo);
+    });
+  };
+
+  var changePrice = function (select, input, offers) {
+    for (var key in offers) {
+      if (select === key) {
+        input.placeholder = offers[key];
+        input.min = offers[key];
+      }
+    }
+  };
+
   placeType.addEventListener('change', function (evt) {
     evt.preventDefault();
-    window.util.changePrice(evt.target.value, priceInput, OffersToValues);
+    changePrice(evt.target.value, priceInput, OffersToValues);
   });
 
   priceInput.addEventListener('input', function (evt) {
@@ -198,8 +221,8 @@
     onFieldGuestsValidity(evt.target.value);
   });
 
-  window.util.syncPlace(arrivalTime, departureTime);
-  window.util.syncPlace(departureTime, arrivalTime);
+  syncPlace(arrivalTime, departureTime);
+  syncPlace(departureTime, arrivalTime);
 
   var setDefaultPosition = function () {
     mainPin.style.left = '570px';
@@ -242,9 +265,9 @@
     setDefaultPosition();
     var formPhotoContainerContent = formPhotoContainer.querySelectorAll('.ad-form__photo');
     if (formPhotoContainerContent) {
-      for (var n = 0; n < formPhotoContainerContent.length; n++) {
-        formPhotoContainerContent[n].remove();
-      }
+      formPhotoContainerContent.forEach(function (elemToDelete) {
+        elemToDelete.remove();
+      });
     }
     window.map.offersLoaded = false;
   };

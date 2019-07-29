@@ -49,12 +49,12 @@
 
   var addListenerOnCheckbox = function () {
     var housingFeaturesArray = housingFeatures.querySelectorAll('input[name="features"]');
-    for (var i = 0; i < housingFeaturesArray.length; i++) {
-      housingFeaturesArray[i].addEventListener('change', function (evt) {
+    housingFeaturesArray.forEach(function (input) {
+      input.addEventListener('change', function (evt) {
         evt.preventDefault();
         window.render.updatePins();
       });
-    }
+    });
   };
   addListenerOnCheckbox();
 
@@ -105,6 +105,7 @@
 
       window.util.debounce(function () {
         window.render.createPins(filteredPins);
+        window.card.addListenersOnPin(filteredPins);
       });
     }
   };
