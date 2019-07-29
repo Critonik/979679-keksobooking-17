@@ -71,8 +71,8 @@
     evt.preventDefault();
     var data = evt.dataTransfer;
     var files = data.files;
-    for (var l = 0; l < files.length; l++) {
-      renderPhotos(files[l], createFormPhoto);
+    for (var i = 0; i < files.length; i++) {
+      renderPhotos(files[i], createFormPhoto);
     }
   });
 
@@ -133,8 +133,8 @@
     });
 
     if (matches) {
-      for (var l = 0; l < file.length; l++) {
-        renderPhotos(file[l], createFormPhoto);
+      for (var j = 0; j < file.length; j++) {
+        renderPhotos(file[j], createFormPhoto);
       }
     }
   });
@@ -159,9 +159,9 @@
 
 
   var syncTime = function (elemFrom, value, elemTo) {
-    for (var i = 0; i < elemFrom.length; i++) {
-      if (value === elemTo[i].value) {
-        elemTo.options[i].selected = true;
+    for (var k = 0; k < elemFrom.length; k++) {
+      if (value === elemTo[k].value) {
+        elemTo.options[k].selected = true;
       }
     }
   };
