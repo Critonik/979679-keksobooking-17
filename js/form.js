@@ -50,9 +50,9 @@
 
   dropZoneForAvatar.addEventListener('drop', function (evt) {
     evt.preventDefault();
-    var data = evt.target.dataTransfer;
+    var data = evt.dataTransfer;
     var files = data.files;
-    renderPhotos(files, uploadAvatar);
+    renderPhotos(files[0], uploadAvatar);
   });
 
   dropZoneForPhoto.addEventListener('dragenter', function (evt) {
