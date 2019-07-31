@@ -18,15 +18,23 @@
     return pinElement;
   };
 
+  var addErrorButtonListener = function () {
+    var main = document.querySelector('.main');
+    var errorButton = main.querySelector('.error__button');
+    if (errorButton) {
+      errorButton.addEventListener('click', function () {
+        location.reload();
+      });
+    }
+  };
+
   var renderErrorBlock = function (errorMessage) {
     var errorBlock = document.querySelector('#error').content.querySelector('.error');
     var errorModule = errorBlock.cloneNode(true);
     map.appendChild(errorModule);
-    errorBlock.textContent = errorMessage;
-    var errorButton = map.querySelector('.error__button');
-    errorButton.addEventListener('click', function () {
-      location.reload();
-    });
+    var errorText = errorBlock.querySelector('.error__message');
+    errorText.textContent = errorMessage;
+    addErrorButtonListener();
   };
 
   window.render = {

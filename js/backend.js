@@ -10,16 +10,14 @@
     load: function (onLoad, onError) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
-      xhr.onreadystatechange = function () {
-        xhr.addEventListener('load', function () {
-          if (xhr.status === SUCCCESS_ANSWER) {
-            onLoad(xhr.response);
-            window.util.unblockForm(mapFilters, 'disabled');
-          } else {
-            onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
-          }
-        });
-      };
+      xhr.addEventListener('load', function () {
+        if (xhr.status === SUCCCESS_ANSWER) {
+          onLoad(xhr.response);
+          window.util.unblockForm(mapFilters, 'disabled');
+        } else {
+          onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        }
+      });
 
       xhr.addEventListener('error', function () {
         onError('Произошла ошибка соединения');
@@ -45,16 +43,14 @@
         submitButton.removeAttribute('disabled');
       });
 
-      xhr.onreadystatechange = function () {
-        xhr.addEventListener('load', function () {
-          if (xhr.status === SUCCCESS_ANSWER) {
-            onLoad(xhr.response);
-          } else {
-            onError('Произошла ошибка загрузки');
-          }
-          submitButton.removeAttribute('disabled');
-        });
-      };
+      xhr.addEventListener('load', function () {
+        if (xhr.status === SUCCCESS_ANSWER) {
+          onLoad(xhr.response);
+        } else {
+          onError('Произошла ошибка загрузки');
+        }
+        submitButton.removeAttribute('disabled');
+      });
 
       xhr.addEventListener('timeout', function () {
         onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
