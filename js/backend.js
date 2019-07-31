@@ -2,8 +2,9 @@
 
 (function () {
   var LOAD_URL = 'https://js.dump.academy/keksobooking/data';
-  var SAVE_URL = 'https://js.dump.academy/keksobooking';
+  var SAVE_URL = 'https://js.dump.academy/keksobooking1';
   var SUCCCESS_ANSWER = 200;
+  var ERROR_ANSWER = 500;
   var TIMEOUT_DURATION = 10000;
   var mapFilters = document.querySelector('.map__filters');
   window.backend = {
@@ -34,19 +35,22 @@
       xhr.send();
     },
     save: function (data, onLoad, onError) {
+      debugger;
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
       var submitButton = document.querySelector('.ad-form__submit');
       submitButton.setAttribute('disabled', true);
 
       xhr.addEventListener('error', function () {
-        onError('Произошла ошибка загрузки');
+        onError('Ошибка загрузки' + xhr.status);
         submitButton.removeAttribute('disabled');
       });
 
       xhr.addEventListener('load', function () {
         if (xhr.status === SUCCCESS_ANSWER) {
           onLoad(xhr.response);
+        } else if (xhr.status === ERROR_ANSWER) {
+          onError('Ошибка загрузки ' + xhr.status);
         } else {
           onError('Произошла ошибка загрузки');
         }

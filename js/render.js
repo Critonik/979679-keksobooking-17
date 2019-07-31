@@ -30,10 +30,10 @@
 
   var renderErrorBlock = function (errorMessage) {
     var errorBlock = document.querySelector('#error').content.querySelector('.error');
+    var errorText = document.querySelector('#error').content.querySelector('.error__message');
+    errorText.textContent = errorMessage;
     var errorModule = errorBlock.cloneNode(true);
     map.appendChild(errorModule);
-    var errorText = errorBlock.querySelector('.error__message');
-    errorText.textContent = errorMessage;
     addErrorButtonListener();
   };
 

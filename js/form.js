@@ -183,10 +183,10 @@
 
   var createErrorBlock = function (text) {
     var errorBlock = document.querySelector('#error').content.querySelector('.error');
+    var errorText = document.querySelector('#error').content.querySelector('.error__message');
+    errorText.textContent = text;
     var errorModule = errorBlock.cloneNode(true);
     var main = document.querySelector('.main');
-    var errorText = errorBlock.querySelector('.error__message');
-    errorText.textContent = text;
     main.appendChild(errorModule);
   };
 
