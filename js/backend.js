@@ -43,7 +43,6 @@
 
       xhr.addEventListener('error', function () {
         onError('Ошибка загрузки' + xhr.status);
-        submitButton.removeAttribute('disabled');
       });
 
       xhr.addEventListener('load', function () {
