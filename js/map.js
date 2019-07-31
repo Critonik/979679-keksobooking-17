@@ -19,16 +19,6 @@
     return Math.round(elem.offsetLeft + (elem.offsetWidth / 2));
   };
 
-  window.map = {
-    setAdress: function (element) {
-      address.value = getPinPositionLeft(element) + ', ' + getPinPositionTop(element);
-    },
-    offersLoaded: false
-  };
-
-  window.map.setAdress(mainPin);
-
-
   var unblockOnStart = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
@@ -58,11 +48,6 @@
       mainPin.style.top = (YMIN - mainPin.offsetHeight) + 'px';
     }
   };
-
-  mainPin.addEventListener('keydown', function (evt) {
-    window.util.isEnterEvent(evt, unblockOnStart);
-  });
-
 
   var observeMovePin = function (evt) {
     evt.preventDefault();
@@ -108,4 +93,18 @@
   };
 
   mainPin.addEventListener('mousedown', observeMovePin);
+
+  window.map = {
+    setAdress: function (element) {
+      address.value = getPinPositionLeft(element) + ', ' + getPinPositionTop(element);
+    },
+    offersLoaded: false
+  };
+
+  window.map.setAdress(mainPin);
+
+  mainPin.addEventListener('keydown', function (evt) {
+    window.util.isEnterEvent(evt, unblockOnStart);
+  });
+
 })();

@@ -36,46 +36,6 @@
     '100': ['0']
   };
 
-  dropZoneForAvatar.addEventListener('dragenter', function (evt) {
-    evt.preventDefault();
-  });
-
-  dropZoneForAvatar.addEventListener('dragleave', function (evt) {
-    evt.preventDefault();
-  });
-
-  dropZoneForAvatar.addEventListener('dragover', function (evt) {
-    evt.preventDefault();
-  });
-
-  dropZoneForAvatar.addEventListener('drop', function (evt) {
-    evt.preventDefault();
-    var data = evt.dataTransfer;
-    var files = data.files;
-    renderPhotos(files[0], uploadAvatar);
-  });
-
-  dropZoneForPhoto.addEventListener('dragenter', function (evt) {
-    evt.preventDefault();
-  });
-
-  dropZoneForPhoto.addEventListener('dragover', function (evt) {
-    evt.preventDefault();
-  });
-
-  dropZoneForPhoto.addEventListener('dragleave', function (evt) {
-    evt.preventDefault();
-  });
-
-  dropZoneForPhoto.addEventListener('drop', function (evt) {
-    evt.preventDefault();
-    var data = evt.dataTransfer;
-    var files = data.files;
-    for (var i = 0; i < files.length; i++) {
-      renderPhotos(files[i], createFormPhoto);
-    }
-  });
-
   var uploadAvatar = function (src) {
     previewAvatar.src = src;
   };
@@ -96,19 +56,6 @@
     return FILE_TYPES.indexOf(type) !== -1;
   };
 
-  fileChooserForAvatar.addEventListener('change', function (evt) {
-    evt.preventDefault();
-    var file = evt.target.files;
-
-    var matches = Array.from(file).filter(function (it) {
-      return isValidImage(it.type);
-    });
-
-    if (matches) {
-      renderPhotos(file[0], uploadAvatar);
-    }
-  });
-
   var renderPhotos = function (file, cb) {
     var reader = new FileReader();
     reader.addEventListener('load', function () {
@@ -117,40 +64,6 @@
 
     reader.readAsDataURL(file);
   };
-
-  fileChooserForPhoto.addEventListener('change', function (evt) {
-    evt.preventDefault();
-    var file = fileChooserForPhoto.files;
-
-    var matches = Array.from(file).filter(function (it) {
-      return isValidImage(it.type);
-    });
-
-    if (matches) {
-      for (var j = 0; j < file.length; j++) {
-        renderPhotos(file[j], createFormPhoto);
-      }
-    }
-  });
-
-  formPhotoContainer.addEventListener('dragstart', function (evt) {
-    if (evt.target.parentNode.classList.contains('ad-form__photo')) {
-      movedPiece = evt.target.parentNode;
-      evt.dataTransfer.setData('text', '');
-    } else if (evt.target.classList.contains('ad-form__photo')) {
-      movedPiece = evt.target;
-      evt.dataTransfer.setData('text', '');
-    }
-  });
-
-  formPhotoContainer.addEventListener('drop', function (evt) {
-    if (evt.target.parentNode.classList.contains('ad-form__photo')) {
-      formPhotoContainer.insertBefore(movedPiece, evt.target.parentNode);
-    } else {
-      formPhotoContainer.insertBefore(movedPiece, null);
-    }
-  });
-
 
   var syncTime = function (elemFrom, value, elemTo) {
     for (var k = 0; k < elemFrom.length; k++) {
@@ -176,24 +89,6 @@
     }
   };
 
-  placeType.addEventListener('change', function (evt) {
-    evt.preventDefault();
-    changePrice(evt.target.value, priceInput, OffersToValues);
-  });
-
-  priceInput.addEventListener('input', function (evt) {
-    evt.preventDefault();
-    var placeTypeValue = placeType.value;
-    var minPrice = OffersToValues[placeTypeValue.toUpperCase()];
-    if (evt.target.value > minPrice) {
-      priceInput.classList.remove('error_outline');
-      evt.target.setCustomValidity('');
-    } else {
-      priceInput.classList.add('error_outline');
-      evt.target.setCustomValidity('Цена должны быть не меньше ' + minPrice + ' рублей');
-    }
-  });
-
   var onFieldRoomsChange = function (value) {
     optionsGuests.forEach(function (option) {
       option.disabled = GuestsByRooms[value].indexOf(option.value) === -1;
@@ -206,18 +101,6 @@
       guestNumber.classList.add('error_outline');
     }
   };
-
-  guestNumber.addEventListener('change', function (evt) {
-    if (GuestsByRooms[roomNumber.value].indexOf(evt.target.value) !== -1) {
-      guestNumber.setCustomValidity('');
-      guestNumber.classList.remove('error_outline');
-    }
-  });
-
-  roomNumber.addEventListener('change', function (evt) {
-    onFieldRoomsChange(evt.target.value);
-    onFieldGuestsValidity(evt.target.value);
-  });
 
   syncPlace(arrivalTime, departureTime);
   syncPlace(departureTime, arrivalTime);
@@ -323,6 +206,122 @@
     document.addEventListener('keydown', onErrorEscPress);
     document.addEventListener('click', closePopup);
   };
+
+  dropZoneForAvatar.addEventListener('dragenter', function (evt) {
+    evt.preventDefault();
+  });
+
+  dropZoneForAvatar.addEventListener('dragleave', function (evt) {
+    evt.preventDefault();
+  });
+
+  dropZoneForAvatar.addEventListener('dragover', function (evt) {
+    evt.preventDefault();
+  });
+
+  dropZoneForAvatar.addEventListener('drop', function (evt) {
+    evt.preventDefault();
+    var data = evt.dataTransfer;
+    var files = data.files;
+    renderPhotos(files[0], uploadAvatar);
+  });
+
+  dropZoneForPhoto.addEventListener('dragenter', function (evt) {
+    evt.preventDefault();
+  });
+
+  dropZoneForPhoto.addEventListener('dragover', function (evt) {
+    evt.preventDefault();
+  });
+
+  dropZoneForPhoto.addEventListener('dragleave', function (evt) {
+    evt.preventDefault();
+  });
+
+  dropZoneForPhoto.addEventListener('drop', function (evt) {
+    evt.preventDefault();
+    var data = evt.dataTransfer;
+    var files = data.files;
+    for (var i = 0; i < files.length; i++) {
+      renderPhotos(files[i], createFormPhoto);
+    }
+  });
+
+  guestNumber.addEventListener('change', function (evt) {
+    if (GuestsByRooms[roomNumber.value].indexOf(evt.target.value) !== -1) {
+      guestNumber.setCustomValidity('');
+      guestNumber.classList.remove('error_outline');
+    }
+  });
+
+  roomNumber.addEventListener('change', function (evt) {
+    onFieldRoomsChange(evt.target.value);
+    onFieldGuestsValidity(evt.target.value);
+  });
+
+  placeType.addEventListener('change', function (evt) {
+    evt.preventDefault();
+    changePrice(evt.target.value, priceInput, OffersToValues);
+  });
+
+  priceInput.addEventListener('input', function (evt) {
+    evt.preventDefault();
+    var placeTypeValue = placeType.value;
+    var minPrice = OffersToValues[placeTypeValue.toUpperCase()];
+    if (evt.target.value > minPrice) {
+      priceInput.classList.remove('error_outline');
+      evt.target.setCustomValidity('');
+    } else {
+      priceInput.classList.add('error_outline');
+      evt.target.setCustomValidity('Цена должны быть не меньше ' + minPrice + ' рублей');
+    }
+  });
+
+  fileChooserForPhoto.addEventListener('change', function (evt) {
+    evt.preventDefault();
+    var file = fileChooserForPhoto.files;
+
+    var matches = Array.from(file).filter(function (it) {
+      return isValidImage(it.type);
+    });
+
+    if (matches) {
+      for (var j = 0; j < file.length; j++) {
+        renderPhotos(file[j], createFormPhoto);
+      }
+    }
+  });
+
+  fileChooserForAvatar.addEventListener('change', function (evt) {
+    evt.preventDefault();
+    var file = evt.target.files;
+
+    var matches = Array.from(file).filter(function (it) {
+      return isValidImage(it.type);
+    });
+
+    if (matches) {
+      renderPhotos(file[0], uploadAvatar);
+    }
+  });
+
+  formPhotoContainer.addEventListener('dragstart', function (evt) {
+    if (evt.target.parentNode.classList.contains('ad-form__photo')) {
+      movedPiece = evt.target.parentNode;
+      evt.dataTransfer.setData('text', '');
+    } else if (evt.target.classList.contains('ad-form__photo')) {
+      movedPiece = evt.target;
+      evt.dataTransfer.setData('text', '');
+    }
+  });
+
+  formPhotoContainer.addEventListener('drop', function (evt) {
+    if (evt.target.parentNode.classList.contains('ad-form__photo')) {
+      formPhotoContainer.insertBefore(movedPiece, evt.target.parentNode);
+    } else {
+      formPhotoContainer.insertBefore(movedPiece, null);
+    }
+  });
 
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();

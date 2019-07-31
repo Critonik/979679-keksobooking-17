@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var LOAD_URL = 'https://js.dump.academy/keksobooking/datsa';
+  var LOAD_URL = 'https://js.dump.academy/keksobooking/data';
   var SAVE_URL = 'https://js.dump.academy/keksobooking';
   var SUCCCESS_ANSWER = 200;
   var TIMEOUT_DURATION = 10000;
@@ -10,6 +10,7 @@
     load: function (onLoad, onError) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
+
       xhr.addEventListener('load', function () {
         if (xhr.status === SUCCCESS_ANSWER) {
           onLoad(xhr.response);
