@@ -15,15 +15,15 @@
   var checkConditioner = housingFeatures.querySelector('input[value="conditioner"]');
 
   var PricesFuncMin = {
-    middle: 10000,
-    low: null,
-    high: 50000
+    MIDDLE: 10000,
+    LOW: null,
+    HIGH: 50000
   };
 
   var PricesFuncMax = {
-    middle: 50000,
-    low: 10000,
-    high: null
+    MIDDLE: 50000,
+    LOW: 10000,
+    HIGH: null
   };
 
   housingType.addEventListener('change', function (evt) {
@@ -58,50 +58,71 @@
   };
   addListenerOnCheckbox();
 
+  var checkingHouseType = function (it) {
+    return housingType.value !== 'any' ? it.offer.type === housingType.value : it;
+  };
+
+  var checkingHousePrice = function (it) {
+    if (housingPrice.value !== 'ANY') {
+      if (housingPrice.value === 'HIGH') {
+        return it.offer.price >= PricesFuncMin[housingPrice.value];
+      }
+      return (it.offer.price >= PricesFuncMin[housingPrice.value] && it.offer.price < PricesFuncMax[housingPrice.value]);
+    }
+    return it;
+  };
+
+  var checkingHouseRooms = function (it) {
+    return housingRooms.value !== 'any' ? it.offer.rooms === +housingRooms.value : it;
+  };
+
+  var chekingHouseGuests = function (it) {
+    if (housingGuests.value !== 'any') {
+      if (housingGuests.value === '0') {
+        return it.offer.guests === +housingGuests.value;
+      }
+      return it.offer.guests >= +housingGuests.value;
+    }
+    return it;
+  };
+
+  var checkingHouseWifi = function (it) {
+    return checkWifi.checked ? it.offer.features.indexOf(checkWifi.value) >= 0 : it;
+  };
+
+  var checkingHouseDishwasher = function (it) {
+    return checkDishwasher.checked ? it.offer.features.indexOf(checkDishwasher.value) >= 0 : it;
+  };
+
+  var checkingHouseParking = function (it) {
+    return checkParking.checked ? it.offer.features.indexOf(checkParking.value) >= 0 : it;
+  };
+
+  var checkingHouseWasher = function (it) {
+    return checkWasher.checked ? it.offer.features.indexOf(checkWasher.value) >= 0 : it;
+  };
+
+  var checkingHouseElevator = function (it) {
+    return checkElevator.checked ? it.offer.features.indexOf(checkElevator.value) >= 0 : it;
+  };
+
+  var checkingHouseConditioner = function (it) {
+    return checkConditioner.checked ? it.offer.features.indexOf(checkConditioner.value) >= 0 : it;
+  };
+
   window.filter = {
-    filtering: function (pinsCopy) {
-      var filteredPins = pinsCopy.filter(function (it) {
-        return housingType.value !== 'any' ? it.offer.type === housingType.value : pinsCopy;
-      })
-      .filter(function (it) {
-        if (housingPrice.value !== 'any') {
-          if (housingPrice.value === 'high') {
-            return it.offer.price >= PricesFuncMin[housingPrice.value];
-          }
-          return (it.offer.price >= PricesFuncMin[housingPrice.value] && it.offer.price < PricesFuncMax[housingPrice.value]);
-        }
-        return pinsCopy;
-      })
-      .filter(function (it) {
-        return housingRooms.value !== 'any' ? it.offer.rooms === +housingRooms.value : pinsCopy;
-      })
-      .filter(function (it) {
-        if (housingGuests.value !== 'any') {
-          if (housingGuests.value === '0') {
-            return it.offer.guests === +housingGuests.value;
-          }
-          return it.offer.guests >= +housingGuests.value;
-        }
-        return pinsCopy;
-      })
-      .filter(function (it) {
-        return checkWifi.checked ? it.offer.features.indexOf(checkWifi.value) >= 0 : pinsCopy;
-      })
-      .filter(function (it) {
-        return checkDishwasher.checked ? it.offer.features.indexOf(checkDishwasher.value) >= 0 : pinsCopy;
-      })
-      .filter(function (it) {
-        return checkParking.checked ? it.offer.features.indexOf(checkParking.value) >= 0 : pinsCopy;
-      })
-      .filter(function (it) {
-        return checkWasher.checked ? it.offer.features.indexOf(checkWasher.value) >= 0 : pinsCopy;
-      })
-      .filter(function (it) {
-        return checkElevator.checked ? it.offer.features.indexOf(checkElevator.value) >= 0 : pinsCopy;
-      })
-      .filter(function (it) {
-        return checkConditioner.checked ? it.offer.features.indexOf(checkConditioner.value) >= 0 : pinsCopy;
-      });
+    sortOut: function (pinsCopy) {
+      var filteredPins = pinsCopy
+      .filter(checkingHouseType)
+      .filter(checkingHousePrice)
+      .filter(checkingHouseRooms)
+      .filter(chekingHouseGuests)
+      .filter(checkingHouseWifi)
+      .filter(checkingHouseDishwasher)
+      .filter(checkingHouseParking)
+      .filter(checkingHouseWasher)
+      .filter(checkingHouseElevator)
+      .filter(checkingHouseConditioner);
 
       window.util.debounce(function () {
         window.render.createPins(filteredPins);

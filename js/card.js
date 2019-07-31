@@ -8,10 +8,10 @@
   var cardImgHeigth = 45;
   var cardImgWidth = 40;
   var TypeToType = {
-    bungalo: 'Бунгало',
-    flat: 'Квартира',
-    house: 'Дом',
-    palace: 'Дворец'
+    BUNGALO: 'Бунгало',
+    FLAT: 'Квартира',
+    HOUSE: 'Дом',
+    PALACE: 'Дворец'
   };
 
   var onPopupEscPress = function (evt) {
@@ -41,7 +41,7 @@
     cardModule.querySelector('.popup__title').innerText = info.offer.title;
     cardModule.querySelector('.popup__text--address').innerText = info.offer.address;
     cardModule.querySelector('.popup__text--price').innerText = info.offer.price + '₽/ночь';
-    cardModule.querySelector('.popup__type').innerText = TypeToType[info.offer.type];
+    cardModule.querySelector('.popup__type').innerText = TypeToType[info.offer.type.toUpperCase()];
     cardModule.querySelector('.popup__text--capacity').innerText = info.offer.rooms + ' комнаты для ' + info.offer.guests + ' гостей.';
     cardModule.querySelector('.popup__text--time').innerText = 'Заезд после ' + info.offer.checkin + ' выезд до ' + info.offer.checkout;
     var cardFeature = cardModule.querySelector('.popup__features');
@@ -94,12 +94,11 @@
         });
       });
     },
-    deleteCard: function () {
+    delete: function () {
       var popupCard = document.querySelector('.popup');
       if (popupCard) {
         popupCard.classList.add('hidden');
       }
-      return;
     },
     createImgElement: function (elem, imgSrc, imgHeight, imgWidth) {
       var img = document.createElement('img');

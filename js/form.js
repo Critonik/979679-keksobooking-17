@@ -23,17 +23,17 @@
   var dropZoneForPhoto = adForm.querySelector('.ad-form__drop-zone');
   var movedPiece = null;
   var OffersToValues = {
-    bungalo: 0,
-    flat: 1000,
-    house: 5000,
-    palace: 10000
+    BUNGALO: 0,
+    FLAT: 1000,
+    HOUSE: 5000,
+    PALACE: 10000
   };
 
   var GuestsByRooms = {
-    1: ['1'],
-    2: ['1', '2'],
-    3: ['1', '2', '3'],
-    100: ['0']
+    '1': ['1'],
+    '2': ['1', '2'],
+    '3': ['1', '2', '3'],
+    '100': ['0']
   };
 
   dropZoneForAvatar.addEventListener('dragenter', function (evt) {
@@ -169,7 +169,7 @@
 
   var changePrice = function (select, input, offers) {
     for (var key in offers) {
-      if (select === key) {
+      if (select === key.toLowerCase()) {
         input.placeholder = offers[key];
         input.min = offers[key];
       }
@@ -184,11 +184,13 @@
   priceInput.addEventListener('input', function (evt) {
     evt.preventDefault();
     var placeTypeValue = placeType.value;
-    var minPrice = OffersToValues[placeTypeValue];
-    if (evt.target.value < minPrice) {
-      evt.target.setCustomValidity('Цена должны быть не меньше ' + minPrice + ' рублей');
-    } else {
+    var minPrice = OffersToValues[placeTypeValue.toUpperCase()];
+    if (evt.target.value > minPrice) {
+      priceInput.classList.remove('error_outline');
       evt.target.setCustomValidity('');
+    } else {
+      priceInput.classList.add('error_outline');
+      evt.target.setCustomValidity('Цена должны быть не меньше ' + minPrice + ' рублей');
     }
   });
 
@@ -201,12 +203,14 @@
   var onFieldGuestsValidity = function (value) {
     if (GuestsByRooms[value].indexOf(guestNumber.value) === -1) {
       guestNumber.setCustomValidity('Укажите другое количество гостей');
+      guestNumber.classList.add('error_outline');
     }
   };
 
   guestNumber.addEventListener('change', function (evt) {
     if (GuestsByRooms[roomNumber.value].indexOf(evt.target.value) !== -1) {
       guestNumber.setCustomValidity('');
+      guestNumber.classList.remove('error_outline');
     }
   });
 
@@ -233,21 +237,39 @@
 
   var closePopup = function () {
     var errorCard = document.querySelector('.error');
-    errorCard.remove();
+    if (errorCard) {
+      errorCard.remove();
+    }
     document.removeEventListener('keydown', onErrorEscPress);
+    document.removeEventListener('click', closePopup);
   };
 
   var closePopupSuccess = function () {
     var successCard = document.querySelector('.success');
-    successCard.remove();
+    if (successCard) {
+      successCard.remove();
+    }
     document.removeEventListener('keydown', onSuccessEscPress);
   };
 
-  var clearForm = function () {
+  var findPopupToClose = function () {
     var popupCard = document.querySelector('.popup');
     if (popupCard) {
       popupCard.classList.add('hidden');
     }
+  };
+
+  var findPhotoToClose = function () {
+    var formPhotoContainerContent = formPhotoContainer.querySelectorAll('.ad-form__photo');
+    if (formPhotoContainerContent) {
+      formPhotoContainerContent.forEach(function (elemToDelete) {
+        elemToDelete.remove();
+      });
+    }
+  };
+
+  var clearAllFields = function () {
+    findPopupToClose();
     previewAvatar.src = 'img/muffin-grey.svg';
     window.util.blockForm(adForm);
     window.util.blockForm(mapFilters);
@@ -255,37 +277,49 @@
     adForm.classList.add('ad-form--disabled');
     adForm.reset();
     window.render.deletePins();
-    window.map.setAdress(mainPin);
+    priceInput.placeholder = OffersToValues[placeType.value.toUpperCase()];
     setDefaultPosition();
-    var formPhotoContainerContent = formPhotoContainer.querySelectorAll('.ad-form__photo');
-    if (formPhotoContainerContent) {
-      formPhotoContainerContent.forEach(function (elemToDelete) {
-        elemToDelete.remove();
-      });
-    }
+    window.map.setAdress(mainPin);
+    findPhotoToClose();
     window.map.offersLoaded = false;
   };
 
-  var onSuccess = function () {
-    clearForm();
+  var createSuccessBlock = function () {
     var successBlock = document.querySelector('#success').content.querySelector('.success');
     var successModule = successBlock.cloneNode(true);
     var main = document.querySelector('.main');
     main.appendChild(successModule);
+  };
+
+  var onSuccess = function () {
+    clearAllFields();
+    createSuccessBlock();
     document.addEventListener('keydown', onSuccessEscPress);
     document.addEventListener('click', closePopupSuccess);
   };
 
-  var onError = function (errorMessage) {
+  var createErrorBlock = function (text) {
     var errorBlock = document.querySelector('#error').content.querySelector('.error');
     var errorModule = errorBlock.cloneNode(true);
     var main = document.querySelector('.main');
+    var errorText = errorBlock.querySelector('.error__message');
+    errorText.textContent = text;
     main.appendChild(errorModule);
-    errorBlock.textContent = errorMessage;
+  };
+
+  var addErrorButtonListener = function () {
+    var main = document.querySelector('.main');
     var errorButton = main.querySelector('.error__button');
-    errorButton.addEventListener('click', function () {
-      closePopup();
-    });
+    if (errorButton) {
+      errorButton.addEventListener('click', function () {
+        closePopup();
+      });
+    }
+  };
+
+  var onError = function (errorMessage) {
+    createErrorBlock(errorMessage);
+    addErrorButtonListener();
     document.addEventListener('keydown', onErrorEscPress);
     document.addEventListener('click', closePopup);
   };
@@ -296,6 +330,6 @@
   });
 
   resetButton.addEventListener('click', function () {
-    clearForm();
+    clearAllFields();
   });
 })();

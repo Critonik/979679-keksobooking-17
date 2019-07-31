@@ -46,10 +46,10 @@
             <option value="bungalo">Бунгало</option>
           </select>
           <select name="housing-price" id="housing-price" class="map__filter">
-            <option value="any" selected>Любая</option>
-            <option value="middle">10000 - 50000&#x20bd;</option>
-            <option value="low">до 10000&#x20bd;</option>
-            <option value="high">от 50000&#x20bd;</option>
+            <option value="ANY" selected>Любая</option>
+            <option value="MIDDLE">10000 - 50000&#x20bd;</option>
+            <option value="LOW">до 10000&#x20bd;</option>
+            <option value="HIGH">от 50000&#x20bd;</option>
           </select>
           <select name="housing-rooms" id="housing-rooms" class="map__filter">
             <option value="any" selected>Любое число комнат</option>
@@ -144,10 +144,10 @@
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="capacity">Количество мест</label>
           <select id="capacity" name="capacity">
-            <option value="3">для 3 гостей</option>
-            <option value="2">для 2 гостей</option>
+            <option value="3" disabled>для 3 гостей</option>
+            <option value="2" disabled>для 2 гостей</option>
             <option value="1" selected>для 1 гостя</option>
-            <option value="0">не для гостей</option>
+            <option value="0" disabled>не для гостей</option>
           </select>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide features">
