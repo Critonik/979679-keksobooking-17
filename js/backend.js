@@ -7,18 +7,34 @@
   var ERROR_ANSWER = 500;
   var TIMEOUT_DURATION = 10000;
   var mapFilters = document.querySelector('.map__filters');
+  var blockButton = function () {
+    var submitButton = document.querySelector('.ad-form__submit');
+    submitButton.setAttribute('disabled', true);
+  };
+
+  var unblockButton = function () {
+    var submitButton = document.querySelector('.ad-form__submit');
+    submitButton.removeAttribute('disabled');
+  };
+
+  var loadCondition = function (request, onLoad, onError) {
+    if (request.status === SUCCCESS_ANSWER) {
+      onLoad(request.response);
+    } else if (request.status === ERROR_ANSWER) {
+      onError('Ошибка загрузки ' + request.status);
+    } else {
+      onError('Произошла ошибка загрузки');
+    }
+  };
+
   window.backend = {
     load: function (onLoad, onError) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
 
       xhr.addEventListener('load', function () {
-        if (xhr.status === SUCCCESS_ANSWER) {
-          onLoad(xhr.response);
-          window.util.unblockForm(mapFilters, 'disabled');
-        } else {
-          onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
-        }
+        loadCondition(xhr, onLoad, onError);
+        window.util.unblockForm(mapFilters, 'disabled');
       });
 
       xhr.addEventListener('error', function () {
@@ -37,23 +53,15 @@
     save: function (data, onLoad, onError) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
-      var submitButton = document.querySelector('.ad-form__submit');
-      submitButton.setAttribute('disabled', true);
-
+      blockButton();
       xhr.addEventListener('error', function () {
         onError('Ошибка загрузки ' + xhr.status);
-        submitButton.removeAttribute('disabled');
+        unblockButton();
       });
 
       xhr.addEventListener('load', function () {
-        if (xhr.status === SUCCCESS_ANSWER) {
-          onLoad(xhr.response);
-        } else if (xhr.status === ERROR_ANSWER) {
-          onError('Ошибка загрузки ' + xhr.status);
-        } else {
-          onError('Произошла ошибка загрузки');
-        }
-        submitButton.removeAttribute('disabled');
+        loadCondition(xhr, onLoad, onError);
+        unblockButton();
       });
 
       xhr.addEventListener('timeout', function () {
