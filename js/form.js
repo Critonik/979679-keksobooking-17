@@ -37,6 +37,14 @@
     '100': ['0']
   };
 
+  var setDisableOnGuest = function () {
+    optionsGuests.forEach(function (option) {
+      option.disabled = GuestsByRooms[roomNumber.value].indexOf(option.value) === -1;
+    });
+  };
+
+  setDisableOnGuest();
+
   var uploadAvatar = function (src) {
     previewAvatar.src = src;
   };
@@ -165,6 +173,7 @@
     setDefaultPosition();
     window.map.setAdress(mainPin);
     findPhotoToClose();
+    setDisableOnGuest();
     window.map.offersLoaded = false;
   };
 
@@ -281,7 +290,6 @@
 
   titleField.addEventListener('input', function () {
     if (titleField.validity.tooShort) {
-      titleField.setCustomValidity('Имя должно состоять минимум из 2-х символов');
       titleField.classList.add('error_outline');
     } else {
       titleField.setCustomValidity('');

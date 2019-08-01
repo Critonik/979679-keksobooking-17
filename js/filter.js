@@ -13,6 +13,7 @@
   var checkWasher = housingFeatures.querySelector('input[value="washer"]');
   var checkElevator = housingFeatures.querySelector('input[value="elevator"]');
   var checkConditioner = housingFeatures.querySelector('input[value="conditioner"]');
+  var housingFeaturesArray = housingFeatures.querySelectorAll('input[name="features"]');
 
   var PricesFuncMin = {
     MIDDLE: 10000,
@@ -26,16 +27,13 @@
     HIGH: null
   };
 
-  var addListenerOnCheckbox = function () {
-    var housingFeaturesArray = housingFeatures.querySelectorAll('input[name="features"]');
-    housingFeaturesArray.forEach(function (input) {
-      input.addEventListener('change', function (evt) {
-        evt.preventDefault();
-        window.render.updatePins();
-      });
+
+  housingFeaturesArray.forEach(function (input) {
+    input.addEventListener('change', function (evt) {
+      evt.preventDefault();
+      window.render.updatePins();
     });
-  };
-  addListenerOnCheckbox();
+  });
 
   var checkingHouseType = function (it) {
     return housingType.value !== 'any' ? it.offer.type === housingType.value : it;
