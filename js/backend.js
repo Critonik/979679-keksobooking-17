@@ -5,6 +5,7 @@
   var SAVE_URL = 'https://js.dump.academy/keksobooking';
   var SUCCCESS_ANSWER = 200;
   var ERROR_ANSWER = 500;
+  var SERVERNOTFOUND_ANSWER = 404;
   var TIMEOUT_DURATION = 10000;
   var mapFilters = document.querySelector('.map__filters');
   var blockButton = function () {
@@ -21,6 +22,8 @@
     if (request.status === SUCCCESS_ANSWER) {
       onLoad(request.response);
     } else if (request.status === ERROR_ANSWER) {
+      onError('Ошибка загрузки ' + request.status);
+    } else if (request.status === SERVERNOTFOUND_ANSWER) {
       onError('Ошибка загрузки ' + request.status);
     } else {
       onError('Произошла ошибка загрузки');
@@ -55,7 +58,7 @@
       xhr.responseType = 'json';
       blockButton();
       xhr.addEventListener('error', function () {
-        onError('Ошибка загрузки ' + xhr.status);
+        onError('Отсутствие соединения');
         unblockButton();
       });
 

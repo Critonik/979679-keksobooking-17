@@ -14,6 +14,7 @@
   var mapFilters = document.querySelector('.map__filters');
   var map = document.querySelector('.map');
   var resetButton = adForm.querySelector('.ad-form__reset');
+  var titleField = adForm.querySelector('#title');
   var fileChooserForAvatar = adForm.querySelector('.ad-form__field input[type=file]');
   var formPhotoContainer = adForm.querySelector('.ad-form__photo-container');
   var previewAvatar = adForm.querySelector('.ad-form-header__userpic');
@@ -269,12 +270,22 @@
     evt.preventDefault();
     var placeTypeValue = placeType.value;
     var minPrice = OffersToValues[placeTypeValue.toUpperCase()];
-    if (evt.target.value > minPrice) {
+    if (evt.target.value >= minPrice) {
       priceInput.classList.remove('error_outline');
       evt.target.setCustomValidity('');
     } else {
       priceInput.classList.add('error_outline');
       evt.target.setCustomValidity('Цена должны быть не меньше ' + minPrice + ' рублей');
+    }
+  });
+
+  titleField.addEventListener('input', function () {
+    if (titleField.validity.tooShort) {
+      titleField.setCustomValidity('Имя должно состоять минимум из 2-х символов');
+      titleField.classList.add('error_outline');
+    } else {
+      titleField.setCustomValidity('');
+      titleField.classList.remove('error_outline');
     }
   });
 
