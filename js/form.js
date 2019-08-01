@@ -242,9 +242,10 @@
     evt.preventDefault();
     var data = evt.dataTransfer;
     var files = data.files;
-    for (var i = 0; i < files.length; i++) {
-      renderPhotos(files[i], createFormPhoto);
-    }
+    var photoArray = Array.from(files);
+    photoArray.forEach(function (photo) {
+      renderPhotos(photo, createFormPhoto);
+    });
   });
 
   guestNumber.addEventListener('change', function (evt) {
@@ -286,9 +287,10 @@
     });
 
     if (matches) {
-      for (var j = 0; j < file.length; j++) {
-        renderPhotos(file[j], createFormPhoto);
-      }
+      var photoArray = Array.from(file);
+      photoArray.forEach(function (photo) {
+        renderPhotos(photo, createFormPhoto);
+      });
     }
   });
 
@@ -310,7 +312,7 @@
       movedPiece = evt.target.parentNode;
       evt.dataTransfer.setData('text', '');
     } else if (evt.target.classList.contains('ad-form__photo')) {
-      movedPiece = evt.target;
+      movedPiece = evt.target.parentNode;
       evt.dataTransfer.setData('text', '');
     }
   });
@@ -318,8 +320,6 @@
   formPhotoContainer.addEventListener('drop', function (evt) {
     if (evt.target.parentNode.classList.contains('ad-form__photo')) {
       formPhotoContainer.insertBefore(movedPiece, evt.target.parentNode);
-    } else {
-      formPhotoContainer.insertBefore(movedPiece, null);
     }
   });
 
