@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var FILE_TYPES = ['image/gif', 'image/jpeg', 'image/png', 'image/jpg'];
+  var MAX_PRICE = 1000000;
   var imgHeigthWidth = 70;
   var adForm = document.querySelector('.ad-form');
   var placeType = adForm.querySelector('#type');
@@ -279,9 +280,12 @@
     evt.preventDefault();
     var placeTypeValue = placeType.value;
     var minPrice = OffersToValues[placeTypeValue.toUpperCase()];
-    if (evt.target.value >= minPrice) {
+    if (evt.target.value >= minPrice && evt.target.value <= MAX_PRICE) {
       priceInput.classList.remove('error_outline');
       evt.target.setCustomValidity('');
+    } else if (evt.target.value > MAX_PRICE) {
+      priceInput.classList.add('error_outline');
+      evt.target.setCustomValidity('Цена должны быть не больше ' + MAX_PRICE + ' рублей');
     } else {
       priceInput.classList.add('error_outline');
       evt.target.setCustomValidity('Цена должны быть не меньше ' + minPrice + ' рублей');
