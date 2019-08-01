@@ -1166,6 +1166,10 @@ fieldset {
  * Сообщения об успешном и неуспешном создании объявления
  */
 
+ .error_outline {
+   outline: 3px red solid;
+ }
+
 .success,
 .error {
   position: fixed;

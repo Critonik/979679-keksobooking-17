@@ -1,9 +1,10 @@
 'use strict';
 (function () {
+  var PIN_QUANTITY = 5;
   var pinsTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var map = document.querySelector('.map');
   var mapPinsElement = map.querySelector('.map__pins');
-
+  var pins = [];
 
   var createPinsWithInfo = function (info) {
     var pinElement = pinsTemplate.cloneNode(true);
@@ -17,8 +18,26 @@
     return pinElement;
   };
 
+  var addErrorButtonListener = function () {
+    var main = document.querySelector('.main');
+    var errorButton = main.querySelector('.error__button');
+    if (errorButton) {
+      errorButton.addEventListener('click', function () {
+        location.reload();
+      });
+    }
+  };
+
+  var renderErrorBlock = function (errorMessage) {
+    var errorBlock = document.querySelector('#error').content.querySelector('.error');
+    var errorText = document.querySelector('#error').content.querySelector('.error__message');
+    errorText.textContent = errorMessage;
+    var errorModule = errorBlock.cloneNode(true);
+    map.appendChild(errorModule);
+    addErrorButtonListener();
+  };
+
   window.render = {
-    pins: [],
     deletePins: function () {
       var deletedPins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
       deletedPins.forEach(function (elementToDel) {
@@ -26,31 +45,21 @@
       });
     },
     updatePins: function () {
-      var pinsCopy = window.render.pins.slice();
-      window.card.deleteCard();
+      var pinsCopy = pins.slice();
+      window.card.delete();
       window.render.deletePins();
-      window.filter.filtering(pinsCopy);
-    },
-    onError: function (errorMessage) {
-      var errorBlock = document.querySelector('#error').content.querySelector('.error');
-      var errorModule = errorBlock.cloneNode(true);
-      map.appendChild(errorModule);
-      errorBlock.textContent = errorMessage;
-      var errorButton = map.querySelector('.error__button');
-      errorButton.addEventListener('click', function () {
-        location.reload();
-      });
+      window.filter.sortOut(pinsCopy);
     },
     createPinOnMap: function () {
-      var successHandler = function (data) {
-        window.render.pins = data;
-        window.render.createPins(window.render.pins);
-        window.card.addListenersOnPin(window.render.pins);
+      var onSuccess = function (data) {
+        pins = data;
+        window.render.createPins(pins);
+        window.card.addListenersOnPin(pins);
       };
-      window.backend.load(successHandler, window.render.onError);
+      window.backend.load(onSuccess, renderErrorBlock);
     },
     createPins: function (elem) {
-      var takeNumber = elem.length > 5 ? 5 : elem.length;
+      var takeNumber = elem.length > PIN_QUANTITY ? PIN_QUANTITY : elem.length;
       var fragment = document.createDocumentFragment();
 
       for (var i = 0; i < takeNumber; i++) {
