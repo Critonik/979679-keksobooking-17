@@ -277,7 +277,6 @@
   });
 
   priceInput.addEventListener('input', function (evt) {
-    debugger;
     evt.preventDefault();
     var placeTypeValue = placeType.value;
     var minPrice = OffersToValues[placeTypeValue.toUpperCase()];
